@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Forecast studio</title>
+  <title>The Perfect Date</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
@@ -70,7 +70,7 @@
 </head>
 <body>
   <main>
-    <h1>Forecast studio</h1>
+    <h1>The Perfect Date</h1>
     <p id="who" class="muted"></p>
     <section class="card">
       <h2>New forecast</h2>
@@ -83,7 +83,7 @@
           </div>
           <div>
             <label for="senderName">Your name</label>
-            <input id="senderName" value="John Place" required>
+            <input id="senderName" required placeholder="Your name">
           </div>
         </div>
         <label for="recipientPhotos">Their photos</label>
@@ -165,6 +165,13 @@
 
     function renderList(forecasts) {
       list.replaceChildren();
+      if (!forecasts.length) {
+        const empty = document.createElement("li");
+        empty.className = "muted";
+        empty.textContent = "No links yet.";
+        list.append(empty);
+        return;
+      }
       forecasts.forEach((item) => {
         const li = document.createElement("li");
         const copy = document.createElement("div");
@@ -225,7 +232,6 @@
         const url = new URL(data.link, location.origin).href;
         status.textContent = url;
         event.target.reset();
-        document.getElementById("senderName").value = "John Place";
         const me = await session();
         await refresh(me.role);
       } catch (error) {

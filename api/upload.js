@@ -1,5 +1,6 @@
 import {
   MAX_PHOTOS,
+  canManageForecast,
   getForecast,
   json,
   readBody,
@@ -25,6 +26,10 @@ export default async function handler(req, res) {
     const forecast = await getForecast(slug);
     if (!forecast) {
       json(res, 404, { error: "Save the forecast before adding photos." });
+      return;
+    }
+    if (!canManageForecast(forecast, session)) {
+      json(res, 403, { error: "That forecast belongs to someone else." });
       return;
     }
     const match = String(body.data || "").match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);

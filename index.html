@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Find out who's heating up your weekend.">
+  <meta name="description" content="Find out who your perfect date is.">
   <meta name="theme-color" content="#ff8fab">
   <meta name="color-scheme" content="light">
-  <meta property="og:title" content="Tia's Weekend Forecast">
-  <meta property="og:description" content="Find out who's heating up your weekend.">
-  <meta property="og:url" content="https://tia.thecre8iveplace.com/">
-  <link rel="canonical" href="https://tia.thecre8iveplace.com/">
+  <meta property="og:title" content="The Perfect Date">
+  <meta property="og:description" content="Find out who your perfect date is.">
+  <meta property="og:url" content="https://date.thecre8iveplace.com/">
+  <link rel="canonical" href="https://date.thecre8iveplace.com/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff8fab'/%3E%3Ccircle cx='32' cy='28' r='12' fill='%23ffd93d'/%3E%3Cpath d='M10 50c8-8 14-8 22 0s14 8 22 0' fill='none' stroke='%232ec4b6' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
-  <title>Tia's Weekend Forecast</title>
+  <title>The Perfect Date</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -1084,7 +1084,7 @@
 
   <main class="stage">
     <section id="screen-open" class="screen panel">
-      <p class="eyebrow">Weekend dating forecast</p>
+      <p class="eyebrow">The perfect date</p>
       <div class="tia-frame" id="tiaFrame">
         <div class="sun-wrap" aria-hidden="true">
           <div class="rays"></div>
@@ -1099,14 +1099,14 @@
         </div>
         <div class="hero-cloud"></div>
       </div>
-      <h1 id="forecastTitle" tabindex="-1">TIA'S WEEKEND FORECAST</h1>
-      <p class="tagline">Find out who's heating up your weekend.</p>
+      <h1 id="forecastTitle" tabindex="-1">TIA'S PERFECT DATE</h1>
+      <p class="tagline">Find out who your perfect date is.</p>
       <ul class="preview-steps">
         <li>Your Type</li>
         <li>Your Vibe</li>
         <li>Your Weekend</li>
       </ul>
-      <button type="button" id="startBtn" class="btn btn-coral">Check My Forecast</button>
+      <button type="button" id="startBtn" class="btn btn-coral">Find My Perfect Date</button>
       <p class="fine">Three quick steps. About a minute.</p>
     </section>
 
@@ -1867,10 +1867,10 @@
 
     function applyBranding(name) {
       const clean = String(name || "Tia").trim() || "Tia";
-      const heading = `${possessive(clean).toUpperCase()} WEEKEND FORECAST`;
+      const heading = `${possessive(clean).toUpperCase()} PERFECT DATE`;
       const title = document.getElementById("forecastTitle");
       if (title) title.textContent = heading;
-      document.title = `${possessive(clean)} Weekend Forecast`;
+      document.title = `${possessive(clean)} Perfect Date`;
       const photo = document.getElementById("tiaPhoto");
       if (photo) photo.alt = clean;
     }
@@ -2622,7 +2622,7 @@
         panel.hidden = panelIndex !== index;
       });
       document.getElementById("stepCount").textContent = `Step ${index + 1} of 3`;
-      nextBtn.textContent = index === STEPS.length - 1 ? "Reveal My Weekend Forecast" : "Next";
+      nextBtn.textContent = index === STEPS.length - 1 ? "Reveal My Perfect Date" : "Next";
       document.querySelectorAll(".progress-item").forEach((item, itemIndex) => {
         item.classList.toggle("is-current", itemIndex === index);
         item.classList.toggle("is-done", itemIndex < index);

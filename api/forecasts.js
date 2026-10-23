@@ -1,5 +1,6 @@
 import {
-  BUILTIN,
+  canManageForecast,
+  forecastOwner,
   json,
   listForecasts,
   readBody,
@@ -19,6 +20,16 @@ function summary(forecast) {
   };
 }
 
+function openSlug(base, existing) {
+  let slug = base;
+  let count = 2;
+  while (existing.some((item) => item.slug === slug)) {
+    slug = `${base}-${count}`.slice(0, 48);
+    count += 1;
+  }
+  return slug;
+}
+
 export default async function handler(req, res) {
   const session = readSession(req);
   if (!session) {
@@ -27,7 +38,8 @@ export default async function handler(req, res) {
   }
   if (req.method === "GET") {
     const forecasts = await listForecasts();
-    json(res, 200, { forecasts: forecasts.map(summary) });
+    const visible = forecasts.filter((item) => canManageForecast(item, session));
+    json(res, 200, { forecasts: visible.map(summary) });
     return;
   }
   if (req.method !== "POST") {
@@ -44,12 +56,14 @@ export default async function handler(req, res) {
     }
     let slug = slugify(body.slug || recipientName);
     const existing = await listForecasts();
-    if (slug !== BUILTIN.slug && existing.some((item) => item.slug === slug)) {
-      slug = `${slug}-${existing.length + 1}`.slice(0, 48);
+    let prior = existing.find((item) => item.slug === slug);
+    if (!prior || !canManageForecast(prior, session)) {
+      prior = null;
+      slug = openSlug(slug, existing);
     }
-    const prior = existing.find((item) => item.slug === slug);
     const forecast = {
       slug,
+      owner: prior ? forecastOwner(prior) : session.email,
       recipientName,
       senderName,
       recipientPhotos: prior?.recipientPhotos || [],
