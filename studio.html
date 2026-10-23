@@ -83,6 +83,8 @@
       color: var(--ink);
       cursor: pointer;
     }
+    .check { display: flex; gap: 10px; align-items: center; }
+    .check input { width: auto; }
     .muted { color: #6d6280; }
     .hidden { display: none; }
   </style>
@@ -91,6 +93,17 @@
   <main>
     <h1>The Perfect Date</h1>
     <p id="who" class="muted"></p>
+    <section class="card">
+      <h2>Dates</h2>
+      <p id="creditBalance" class="muted">Checking your dates…</p>
+      <p id="creditNote">A new person uses one date. Updating a link you already made is free.</p>
+      <div class="actions">
+        <button class="aqua pack" type="button" data-pack="one">1 date · $2.99</button>
+        <button class="aqua pack" type="button" data-pack="five">5 dates · $12</button>
+        <button class="aqua pack" type="button" data-pack="ten">10 dates · $20</button>
+      </div>
+      <p id="creditStatus" class="ok" role="status"></p>
+    </section>
     <section class="card">
       <h2>New forecast</h2>
       <p>The first name is the page they open. Your name stays hidden until the end.</p>
@@ -109,6 +122,20 @@
         <input id="recipientPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
         <label for="senderPhotos">Your photos</label>
         <input id="senderPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <label class="check" for="contactOptIn">
+          <input id="contactOptIn" type="checkbox">
+          Let them text or email you after your name appears
+        </label>
+        <div class="row two">
+          <div>
+            <label for="contactEmail">Your email</label>
+            <input id="contactEmail" type="email" placeholder="you@email.com">
+          </div>
+          <div>
+            <label for="contactPhone">Your phone</label>
+            <input id="contactPhone" type="tel" placeholder="(954) 555-1212">
+          </div>
+        </div>
         <div class="actions">
           <button type="submit">Create link</button>
         </div>
@@ -142,6 +169,20 @@
           <button class="aqua" type="submit">Add person</button>
         </div>
       </form>
+      <h3>Give dates</h3>
+      <div class="row two">
+        <div>
+          <label for="grantEmail">Email</label>
+          <input id="grantEmail" type="email" placeholder="person@email.com">
+        </div>
+        <div>
+          <label for="grantCount">How many</label>
+          <input id="grantCount" type="number" min="1" max="50" value="1">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="ghost" id="grant" type="button">Give dates</button>
+      </div>
       <ul id="people"></ul>
       <p id="peopleStatus" class="error" role="status"></p>
     </section>
@@ -296,7 +337,10 @@
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             recipientName: document.getElementById("recipientName").value,
-            senderName: document.getElementById("senderName").value
+            senderName: document.getElementById("senderName").value,
+            contactOptIn: document.getElementById("contactOptIn").checked,
+            contactEmail: document.getElementById("contactEmail").value,
+            contactPhone: document.getElementById("contactPhone").value
           })
         });
         const data = await response.json();
@@ -311,7 +355,63 @@
         status.textContent = error.message;
       }
       const me = await session();
-      if (me.signedIn) await refresh(me.role);
+      if (me.signedIn) {
+        await refresh(me.role);
+        await loadCredits();
+      }
+    });
+
+    async function loadCredits() {
+      const response = await fetch("/api/credits");
+      const data = await response.json().catch(() => ({}));
+      const balance = document.getElementById("creditBalance");
+      if (!response.ok) {
+        balance.textContent = data.error || "Dates could not be loaded.";
+        return;
+      }
+      const word = data.balance === 1 ? "date" : "dates";
+      balance.textContent = data.payments
+        ? `You have ${data.balance} ${word} left.`
+        : `You have ${data.balance} ${word}. Card payments are not connected yet, so a new link still works.`;
+    }
+
+    document.querySelectorAll(".pack").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const status = document.getElementById("creditStatus");
+        status.className = "ok";
+        status.textContent = "Opening payment…";
+        button.disabled = true;
+        try {
+          const response = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ pack: button.dataset.pack })
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.url) throw new Error(data.error || "The payment page could not be opened.");
+          location.href = data.url;
+        } catch (error) {
+          status.className = "error";
+          status.textContent = error.message;
+          button.disabled = false;
+        }
+      });
+    });
+
+    document.getElementById("grant").addEventListener("click", async () => {
+      const status = document.getElementById("peopleStatus");
+      status.textContent = "";
+      const response = await fetch("/api/credits", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("grantEmail").value,
+          count: document.getElementById("grantCount").value
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      status.textContent = response.ok ? `${data.email} now has ${data.balance} dates.` : (data.error || "Those dates could not be added.");
+      if (response.ok) await loadCredits();
     });
 
     document.getElementById("person").addEventListener("submit", async (event) => {
@@ -348,7 +448,15 @@
         return;
       }
       who.textContent = `${me.email} · ${me.role}`;
+      const creditStatus = document.getElementById("creditStatus");
+      if (location.search.includes("credits=bought")) creditStatus.textContent = "Payment received. Your dates show up in a moment.";
+      if (location.search.includes("credits=cancel")) creditStatus.textContent = "No dates were bought.";
       await refresh(me.role);
+      await loadCredits();
+      if (location.search.includes("credits=bought")) {
+        setTimeout(loadCredits, 2500);
+        setTimeout(loadCredits, 6000);
+      }
     });
   </script>
 </body>

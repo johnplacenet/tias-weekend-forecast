@@ -3,6 +3,7 @@ import {
   generatePortrait,
   getForecast,
   json,
+  publicContact,
   markUsage,
   readBody,
   storeImage,
@@ -64,6 +65,7 @@ export default async function handler(req, res) {
     }
     json(res, 200, {
       senderName: forecast.senderName,
+      contact: publicContact(forecast),
       photo: photo ? {
         src: photo.src,
         focus: photo.focus || "center 30%",

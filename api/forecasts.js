@@ -1,12 +1,16 @@
 import {
   accountSlug,
   canManageForecast,
+  contactFrom,
+  creditBalance,
   json,
   listForecasts,
+  paymentsLive,
   readBody,
   readSession,
   saveForecast,
-  slugify
+  slugify,
+  spendCredit
 } from "../lib/server.js";
 
 function summary(forecast) {
@@ -60,7 +64,20 @@ export default async function handler(req, res) {
     let slug = slugify(body.slug || recipientName);
     const existing = await listForecasts();
     let prior = existing.find((item) => item.slug === slug && accountSlug(item) === account && canManageForecast(item, session));
+    const isNew = !prior;
     if (!prior) slug = openSlug(slug, existing, account);
+    const contact = contactFrom(body);
+    if (contact.contactOptIn && !contact.contactEmail.includes("@") && contact.contactPhone.replace(/\D/g, "").length < 10) {
+      json(res, 400, { error: "Add an email or phone, or leave the text and email buttons off." });
+      return;
+    }
+    if (isNew && paymentsLive()) {
+      const balance = await creditBalance(session.email);
+      if (balance < 1) {
+        json(res, 402, { error: "A new person uses one date. Buy a pack first." });
+        return;
+      }
+    }
     const forecast = {
       slug,
       account,
@@ -69,9 +86,13 @@ export default async function handler(req, res) {
       senderName,
       recipientPhotos: prior?.recipientPhotos || [],
       senderPhotos: prior?.senderPhotos || [],
+      contactOptIn: contact.contactOptIn,
+      contactEmail: contact.contactEmail,
+      contactPhone: contact.contactPhone,
       updatedAt: new Date().toISOString()
     };
     await saveForecast(forecast);
+    if (isNew && paymentsLive()) await spendCredit(session.email);
     json(res, 200, summary(forecast));
   } catch (error) {
     json(res, error.status || 500, { error: error.message || "Could not save that forecast." });
