@@ -2597,14 +2597,26 @@
       }
     }
 
-    function smsHref(phone, message) {
+    function phoneNumber(phone) {
       const digits = String(phone || "").replace(/\D/g, "");
-      let number = "";
-      if (digits.length === 10) number = `+1${digits}`;
-      else if (digits.length === 11 && digits.startsWith("1")) number = `+${digits}`;
-      else if (digits.length > 11) number = `+${digits}`;
-      if (!number) return "";
-      return `sms:${number}?&body=${encodeURIComponent(message)}`;
+      if (digits.length === 10) return `+1${digits}`;
+      if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+      if (digits.length > 11) return `+${digits}`;
+      return "";
+    }
+
+    function smsHref(number, message) {
+      const body = encodeURIComponent(message);
+      const apple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      return apple ? `sms:${number}&body=${body}` : `sms:${number}?body=${body}`;
+    }
+
+    function contactLink(className, href, label) {
+      const link = document.createElement("a");
+      link.className = className;
+      link.href = href;
+      link.textContent = label;
+      return link;
     }
 
     function mountContact(name, contact) {
@@ -2616,20 +2628,14 @@
       const bar = document.createElement("div");
       bar.id = "contactActions";
       bar.className = "actions";
-      const phoneLink = smsHref(contact.phone, note);
-      if (phoneLink) {
-        const text = document.createElement("a");
-        text.className = "btn btn-coral";
-        text.href = phoneLink;
-        text.textContent = `Text ${first}`;
-        bar.append(text);
+      const number = phoneNumber(contact.phone);
+      if (number) {
+        bar.append(contactLink("btn btn-coral", smsHref(number, note), `Text ${first}`));
+        bar.append(contactLink("btn btn-lavender", `tel:${number}`, `Call ${first}`));
       }
       if (/^[^\s@]+@[^\s@]+$/.test(contact.email || "")) {
-        const mail = document.createElement("a");
-        mail.className = "btn btn-aqua";
-        mail.href = `mailto:${contact.email}?subject=${encodeURIComponent("The Perfect Date")}&body=${encodeURIComponent(note)}`;
-        mail.textContent = `Email ${first}`;
-        bar.append(mail);
+        const href = `mailto:${contact.email}?subject=${encodeURIComponent("The Perfect Date")}&body=${encodeURIComponent(note)}`;
+        bar.append(contactLink("btn btn-aqua", href, `Email ${first}`));
       }
       if (!bar.childElementCount) return;
       resultPanel.querySelector(".actions").before(bar);
