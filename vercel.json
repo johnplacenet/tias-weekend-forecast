@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/f/:account/:slug", "destination": "/forecast.html" },
     { "source": "/f/:slug", "destination": "/forecast.html" },
     { "source": "/login", "destination": "/login.html" },
     { "source": "/signup", "destination": "/login.html" },

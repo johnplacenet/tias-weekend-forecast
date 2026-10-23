@@ -2532,7 +2532,7 @@
       revealTask = fetch("/api/reveal", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ slug: forecastSlug, answers: collectAnswers() })
+        body: JSON.stringify({ slug: forecastSlug, account: forecastAccount, answers: collectAnswers() })
       }).then((response) => response.ok ? response.json() : null).catch(() => null);
     }
 
@@ -2805,15 +2805,23 @@
       startTiaRotation();
     }
 
-    function readSlug() {
+    function readRoute() {
       const parts = location.pathname.split("/").filter(Boolean);
-      if (parts[0] === "f" && parts[1]) return decodeURIComponent(parts[1]).toLowerCase();
-      return "";
+      if (parts[0] !== "f" || !parts[1]) return { account: "", slug: "" };
+      if (parts[2]) {
+        return {
+          account: decodeURIComponent(parts[1]).toLowerCase(),
+          slug: decodeURIComponent(parts[2]).toLowerCase()
+        };
+      }
+      return { account: "", slug: decodeURIComponent(parts[1]).toLowerCase() };
     }
 
-    forecastSlug = readSlug();
+    const route = readRoute();
+    forecastSlug = route.slug;
+    let forecastAccount = route.account;
     if (!forecastSlug) location.replace("/");
-    if (forecastSlug === "tia") {
+    if (forecastSlug === "tia" && !forecastAccount) {
       recipientList = TIA_PHOTOS;
       TIA_PHOTOS.forEach((photo) => {
         const image = new Image();
@@ -2827,7 +2835,7 @@
     bindTiaPhoto();
     if (forecastSlug && forecastSlug !== "tia") applyBranding(forecastSlug.replace(/-/g, " "));
 
-    if (forecastSlug) fetch(`/api/forecast?slug=${encodeURIComponent(forecastSlug)}`)
+    if (forecastSlug) fetch(`/api/forecast?slug=${encodeURIComponent(forecastSlug)}&account=${encodeURIComponent(forecastAccount)}`)
       .then((response) => response.ok ? response.json() : null)
       .then((forecast) => {
         if (!forecast) return;

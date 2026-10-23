@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
   try {
     const body = await readBody(req);
-    const forecast = await getForecast(body.slug || "tia");
+    const forecast = await getForecast(body.slug || "tia", body.account || "");
     if (!forecast) {
       json(res, 404, { error: "That forecast is not ready." });
       return;
@@ -30,7 +30,8 @@ export default async function handler(req, res) {
     const senderPhotos = identityPhotos(forecast.senderPhotos, 2);
     const recipientPhotos = identityPhotos(forecast.recipientPhotos, 2);
     const fallback = senderPhotos[0] || null;
-    const usage = await usageFor(forecast.slug).catch(() => ({ day: "", count: DAILY_PORTRAITS, all: null }));
+    const usageKey = `${forecast.account || "date"}/${forecast.slug}`;
+    const usage = await usageFor(usageKey).catch(() => ({ day: "", count: DAILY_PORTRAITS, all: null }));
     let photo = fallback ? { src: fallback.src, focus: fallback.focus || "center 30%", generated: false } : null;
     if (fallback && usage.count < DAILY_PORTRAITS) {
       try {
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
         if (portrait) {
           let src = `data:${portrait.contentType};base64,${portrait.buffer.toString("base64")}`;
           try {
-            src = await storeImage(forecast.slug, "portrait", portrait.buffer, portrait.contentType);
+            src = await storeImage(`${forecast.account || "date"}/${forecast.slug}`, "portrait", portrait.buffer, portrait.contentType);
           } catch (error) {
             src = `data:${portrait.contentType};base64,${portrait.buffer.toString("base64")}`;
           }
@@ -55,7 +56,7 @@ export default async function handler(req, res) {
             alt: recipientPhotos.length ? `${forecast.senderName} and ${forecast.recipientName}` : forecast.senderName
           };
           usage.count += 1;
-          if (usage.all) await markUsage(forecast.slug, usage).catch(() => {});
+          if (usage.all) await markUsage(usageKey, usage).catch(() => {});
         }
       } catch (error) {
         photo = { src: fallback.src, focus: fallback.focus || "center 30%", generated: false };

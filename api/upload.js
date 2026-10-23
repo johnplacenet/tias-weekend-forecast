@@ -22,8 +22,9 @@ export default async function handler(req, res) {
   try {
     const body = await readBody(req);
     const slug = String(body.slug || "");
+    const account = String(body.account || "");
     const role = body.role === "sender" ? "sender" : "recipient";
-    const forecast = await getForecast(slug);
+    const forecast = await getForecast(slug, account);
     if (!forecast) {
       json(res, 404, { error: "Save the forecast before adding photos." });
       return;
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
       json(res, 400, { error: `Use up to ${MAX_PHOTOS} photos.` });
       return;
     }
-    const url = await storeImage(forecast.slug, role, buffer, match[1]);
+    const url = await storeImage(`${forecast.account || "date"}/${forecast.slug}`, role, buffer, match[1]);
     photos.push({ src: url, focus: "center 30%" });
     forecast[key] = photos;
     forecast.updatedAt = new Date().toISOString();

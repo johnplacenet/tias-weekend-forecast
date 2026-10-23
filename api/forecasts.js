@@ -1,6 +1,6 @@
 import {
+  accountSlug,
   canManageForecast,
-  forecastOwner,
   json,
   listForecasts,
   readBody,
@@ -10,20 +10,22 @@ import {
 } from "../lib/server.js";
 
 function summary(forecast) {
+  const account = accountSlug(forecast);
   return {
+    account,
     slug: forecast.slug,
     recipientName: forecast.recipientName,
     senderName: forecast.senderName,
     recipientCount: (forecast.recipientPhotos || []).length,
     senderCount: (forecast.senderPhotos || []).length,
-    link: `/f/${forecast.slug}`
+    link: `/f/${account}/${forecast.slug}`
   };
 }
 
-function openSlug(base, existing) {
+function openSlug(base, existing, account) {
   let slug = base;
   let count = 2;
-  while (existing.some((item) => item.slug === slug)) {
+  while (existing.some((item) => item.slug === slug && accountSlug(item) === account)) {
     slug = `${base}-${count}`.slice(0, 48);
     count += 1;
   }
@@ -54,16 +56,15 @@ export default async function handler(req, res) {
       json(res, 400, { error: "Add both names." });
       return;
     }
+    const account = accountSlug(session.email);
     let slug = slugify(body.slug || recipientName);
     const existing = await listForecasts();
-    let prior = existing.find((item) => item.slug === slug);
-    if (!prior || !canManageForecast(prior, session)) {
-      prior = null;
-      slug = openSlug(slug, existing);
-    }
+    let prior = existing.find((item) => item.slug === slug && accountSlug(item) === account && canManageForecast(item, session));
+    if (!prior) slug = openSlug(slug, existing, account);
     const forecast = {
       slug,
-      owner: prior ? forecastOwner(prior) : session.email,
+      account,
+      owner: prior?.owner || session.email,
       recipientName,
       senderName,
       recipientPhotos: prior?.recipientPhotos || [],

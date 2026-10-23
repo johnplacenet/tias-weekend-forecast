@@ -60,9 +60,28 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      align-items: center;
+      align-items: flex-start;
       padding: 12px 0;
       border-bottom: 2px solid #ffe4ec;
+    }
+    .address {
+      margin: 6px 0 0;
+      color: var(--ink);
+      font-size: 0.95rem;
+      line-height: 1.35;
+      word-break: break-all;
+      user-select: all;
+    }
+    .row-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    button.copy {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
     }
     .muted { color: #6d6280; }
     .hidden { display: none; }
@@ -168,14 +187,14 @@
       });
     }
 
-    async function uploadSet(slug, role, input) {
+    async function uploadSet(account, slug, role, input) {
       const files = Array.from(input.files || []).slice(0, 8);
       for (let index = 0; index < files.length; index += 1) {
         const data = await fileToData(files[index]);
         const response = await fetch("/api/upload", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ slug, role, data, replace: index === 0 })
+          body: JSON.stringify({ account, slug, role, data, replace: index === 0 })
         });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(payload.error || "A photo could not be saved.");
@@ -199,14 +218,33 @@
         const meta = document.createElement("div");
         meta.className = "muted";
         meta.textContent = `${item.senderName} · ${item.recipientCount} of theirs · ${item.senderCount} of yours`;
-        copy.append(title, meta);
+        const url = new URL(item.link, location.origin).href;
+        const address = document.createElement("p");
+        address.className = "address";
+        address.textContent = url;
+        copy.append(title, meta, address);
+        const actions = document.createElement("div");
+        actions.className = "row-actions";
+        const copyBtn = document.createElement("button");
+        copyBtn.type = "button";
+        copyBtn.className = "copy";
+        copyBtn.textContent = "Copy";
+        copyBtn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(url);
+            copyBtn.textContent = "Copied";
+          } catch (error) {
+            copyBtn.textContent = "Select the link";
+          }
+        });
         const link = document.createElement("a");
         link.className = "link";
         link.href = item.link;
         link.target = "_blank";
         link.rel = "noopener";
         link.textContent = "Open";
-        li.append(copy, link);
+        actions.append(copyBtn, link);
+        li.append(copy, actions);
         list.append(li);
       });
     }
@@ -246,8 +284,8 @@
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Could not create that forecast.");
-        await uploadSet(data.slug, "recipient", document.getElementById("recipientPhotos"));
-        await uploadSet(data.slug, "sender", document.getElementById("senderPhotos"));
+        await uploadSet(data.account, data.slug, "recipient", document.getElementById("recipientPhotos"));
+        await uploadSet(data.account, data.slug, "sender", document.getElementById("senderPhotos"));
         const url = new URL(data.link, location.origin).href;
         status.textContent = url;
         event.target.reset();
