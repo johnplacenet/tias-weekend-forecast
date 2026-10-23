@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/f/:slug", "destination": "/index.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/signup", "destination": "/login.html" },
+    { "source": "/studio", "destination": "/studio.html" }
+  ]
+}

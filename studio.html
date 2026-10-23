@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forecast studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #2b2140; --coral: #ff5d73; --aqua: #1aa89a; --paper: #fff8f3; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Fredoka, "Avenir Next", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(165deg, #c8f4ff, #ffe08a 40%, #ffb3c7);
+    }
+    main { width: min(860px, calc(100% - 24px)); margin: 24px auto 48px; }
+    h1 { margin: 0 0 6px; font-size: clamp(2rem, 6vw, 3.2rem); }
+    h2 { margin: 0 0 8px; }
+    .card {
+      background: var(--paper);
+      border-radius: 28px;
+      padding: 22px;
+      margin: 16px 0;
+      box-shadow: 0 16px 36px rgba(43, 33, 64, 0.12);
+    }
+    label { display: block; font-weight: 700; margin: 12px 0 6px; }
+    input, select {
+      width: 100%;
+      border: 3px solid #ffe0ea;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: white;
+    }
+    .row { display: grid; gap: 12px; }
+    @media (min-width: 700px) { .row.two { grid-template-columns: 1fr 1fr; } }
+    button, .link {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: var(--coral);
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button.aqua { background: var(--aqua); }
+    button.ghost { background: white; color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .error { color: #b4234a; font-weight: 700; }
+    .ok { color: #0f8f86; font-weight: 700; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 2px solid #ffe4ec;
+    }
+    .muted { color: #6d6280; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Forecast studio</h1>
+    <p id="who" class="muted"></p>
+    <section class="card">
+      <h2>New forecast</h2>
+      <p>Her name goes on the front. Your name is the reveal. Photos of each of you take turns.</p>
+      <form id="create">
+        <div class="row two">
+          <div>
+            <label for="recipientName">Their name</label>
+            <input id="recipientName" required placeholder="Mia">
+          </div>
+          <div>
+            <label for="senderName">Your name</label>
+            <input id="senderName" value="John Place" required>
+          </div>
+        </div>
+        <label for="recipientPhotos">Their photos</label>
+        <input id="recipientPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <label for="senderPhotos">Your photos</label>
+        <input id="senderPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <div class="actions">
+          <button type="submit">Create link</button>
+        </div>
+        <p id="createStatus" class="ok" role="status"></p>
+      </form>
+    </section>
+    <section class="card">
+      <h2>Links</h2>
+      <ul id="list"></ul>
+    </section>
+    <section class="card" id="peopleCard">
+      <h2>People</h2>
+      <p>Admins can add someone and give them a role. There is no public signup.</p>
+      <form id="person">
+        <div class="row two">
+          <div>
+            <label for="personEmail">Email</label>
+            <input id="personEmail" type="email" required>
+          </div>
+          <div>
+            <label for="personRole">Role</label>
+            <select id="personRole">
+              <option value="creator">Creator</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <label for="personPassword">Password</label>
+        <input id="personPassword" type="password" minlength="8" required>
+        <div class="actions">
+          <button class="aqua" type="submit">Add person</button>
+        </div>
+      </form>
+      <ul id="people"></ul>
+      <p id="peopleStatus" class="error" role="status"></p>
+    </section>
+    <div class="actions">
+      <button class="ghost" id="logout" type="button">Sign out</button>
+    </div>
+  </main>
+  <script>
+    const who = document.getElementById("who");
+    const list = document.getElementById("list");
+    const peopleCard = document.getElementById("peopleCard");
+
+    async function session() {
+      const response = await fetch("/api/session");
+      return response.json();
+    }
+
+    function fileToData(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadSet(slug, role, input) {
+      const files = Array.from(input.files || []).slice(0, 8);
+      for (const file of files) {
+        const data = await fileToData(file);
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ slug, role, data })
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || "A photo could not be saved.");
+      }
+    }
+
+    function renderList(forecasts) {
+      list.replaceChildren();
+      forecasts.forEach((item) => {
+        const li = document.createElement("li");
+        const copy = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = item.recipientName;
+        const meta = document.createElement("div");
+        meta.className = "muted";
+        meta.textContent = `${item.senderName} · ${item.recipientCount} of theirs · ${item.senderCount} of yours`;
+        copy.append(title, meta);
+        const link = document.createElement("a");
+        link.className = "link";
+        link.href = item.link;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "Open";
+        li.append(copy, link);
+        list.append(li);
+      });
+    }
+
+    async function refresh(role) {
+      const response = await fetch("/api/forecasts");
+      const data = await response.json();
+      if (response.ok) renderList(data.forecasts || []);
+      if (role !== "admin") {
+        peopleCard.classList.add("hidden");
+        return;
+      }
+      const peopleResponse = await fetch("/api/people");
+      const people = await peopleResponse.json();
+      const ul = document.getElementById("people");
+      ul.replaceChildren();
+      (people.people || []).forEach((person) => {
+        const li = document.createElement("li");
+        li.textContent = `${person.email} · ${person.role}`;
+        ul.append(li);
+      });
+    }
+
+    document.getElementById("create").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const status = document.getElementById("createStatus");
+      status.className = "ok";
+      status.textContent = "Saving…";
+      try {
+        const response = await fetch("/api/forecasts", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            recipientName: document.getElementById("recipientName").value,
+            senderName: document.getElementById("senderName").value
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not create that forecast.");
+        await uploadSet(data.slug, "recipient", document.getElementById("recipientPhotos"));
+        await uploadSet(data.slug, "sender", document.getElementById("senderPhotos"));
+        const url = new URL(data.link, location.origin).href;
+        status.textContent = url;
+        event.target.reset();
+        document.getElementById("senderName").value = "John Place";
+        const me = await session();
+        await refresh(me.role);
+      } catch (error) {
+        status.className = "error";
+        status.textContent = error.message;
+      }
+    });
+
+    document.getElementById("person").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const status = document.getElementById("peopleStatus");
+      status.textContent = "";
+      const response = await fetch("/api/people", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("personEmail").value,
+          role: document.getElementById("personRole").value,
+          password: document.getElementById("personPassword").value
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        status.textContent = data.error || "Could not add that person.";
+        return;
+      }
+      event.target.reset();
+      const me = await session();
+      await refresh(me.role);
+    });
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await fetch("/api/logout", { method: "POST" });
+      location.href = "/login";
+    });
+
+    session().then(async (me) => {
+      if (!me.signedIn) {
+        location.replace("/login?next=/studio");
+        return;
+      }
+      who.textContent = `${me.email} · ${me.role}`;
+      await refresh(me.role);
+    });
+  </script>
+</body>
+</html>
