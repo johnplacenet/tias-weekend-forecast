@@ -2760,13 +2760,15 @@
 
     function useRecipientPhotos(list) {
       if (!Array.isArray(list) || !list.length) return;
-      recipientList = list;
+      recipientList = list.map((photo) => ({
+        src: photo.src,
+        focus: photo.focus || "center 30%"
+      }));
       tiaDeck = [];
       tiaCursor = 0;
-      lastTiaSrc = "";
+      lastTiaSrc = recipientList[0].src;
       tiaFailures = 0;
-      const photo = nextTiaPhoto();
-      if (photo) paintTia(photo, false);
+      paintTia(recipientList[0], false);
       startTiaRotation();
     }
 
