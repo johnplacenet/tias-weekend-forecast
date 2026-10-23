@@ -2587,7 +2587,7 @@
         `${dreamMatch.pronoun} is almost here`
       ];
       let step = 0;
-      const deadline = Date.now() + 22000;
+      const deadline = Date.now() + 50000;
       while (Date.now() < deadline) {
         const winner = await Promise.race([
           revealTask.then((value) => ({ value })),
