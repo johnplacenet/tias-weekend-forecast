@@ -430,6 +430,18 @@
       font-size: 1.25rem;
     }
 
+    .wish {
+      width: 100%;
+      min-height: 128px;
+      border: 3px solid #eadff8;
+      border-radius: 22px;
+      padding: 14px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+      resize: vertical;
+    }
+
     .slider-label { display: block; margin: 10px 0 6px; font-weight: 700; }
 
     input[type="range"] {
@@ -1691,7 +1703,12 @@
               { id: "anything", label: "Anything with a beat", joke: "Anything with a beat. John will dance to the forecast." }
             ]
           },
-          { kind: "travel" }
+          { kind: "travel" },
+          {
+            kind: "wish",
+            title: "Describe your perfect man or woman",
+            hint: "Optional. It shapes the date in the picture."
+          }
         ]
       }
     ];
@@ -2506,7 +2523,8 @@
       return {
         selected,
         age: ageTouched && age ? age.textContent : "",
-        travel: travelTouched && travel ? travel.textContent : ""
+        travel: travelTouched && travel ? travel.textContent : "",
+        wish: (document.getElementById("perfectNote")?.value || "").trim().slice(0, 400)
       };
     }
 
@@ -2726,6 +2744,25 @@
       if (mark) travelTouched = true;
     }
 
+    function renderWish(block) {
+      const wrap = document.createElement("section");
+      wrap.className = "block";
+      const title = document.createElement("h3");
+      title.id = "label-perfect";
+      title.textContent = block.title;
+      const hint = document.createElement("p");
+      hint.className = "hint";
+      hint.textContent = block.hint;
+      const input = document.createElement("textarea");
+      input.id = "perfectNote";
+      input.className = "wish";
+      input.maxLength = 400;
+      input.rows = 4;
+      input.setAttribute("aria-labelledby", title.id);
+      wrap.append(title, hint, input);
+      return wrap;
+    }
+
     function buildQuiz() {
       const root = document.getElementById("quizRoot");
       STEPS.forEach((stepData, index) => {
@@ -2743,6 +2780,7 @@
         stepData.blocks.forEach((block) => {
           if (block.kind === "age") panel.append(renderAge());
           else if (block.kind === "travel") panel.append(renderTravel());
+          else if (block.kind === "wish") panel.append(renderWish(block));
           else panel.append(renderChoices(block));
         });
         root.append(panel);

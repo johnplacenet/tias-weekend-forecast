@@ -11,9 +11,15 @@ import {
 
 export const config = { maxDuration: 60 };
 
-function pickPhoto(photos) {
-  if (!photos.length) return null;
-  return photos[Math.floor(Math.random() * photos.length)];
+function pickPhotos(photos, count) {
+  const pool = (photos || []).filter((photo) => photo && photo.src);
+  for (let index = pool.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(Math.random() * (index + 1));
+    const held = pool[index];
+    pool[index] = pool[swap];
+    pool[swap] = held;
+  }
+  return pool.slice(0, count);
 }
 
 export default async function handler(req, res) {
@@ -28,18 +34,19 @@ export default async function handler(req, res) {
       json(res, 404, { error: "That forecast is not ready." });
       return;
     }
-    const fallback = pickPhoto(forecast.senderPhotos || []);
-    const partner = pickPhoto(forecast.recipientPhotos || []);
+    const senderPhotos = pickPhotos(forecast.senderPhotos, 2);
+    const recipientPhotos = pickPhotos(forecast.recipientPhotos, 2);
+    const fallback = senderPhotos[0] || null;
     const usage = await usageFor(forecast.slug).catch(() => ({ day: "", count: DAILY_PORTRAITS, all: null }));
     let photo = fallback ? { src: fallback.src, focus: fallback.focus || "center 30%", generated: false } : null;
     if (fallback && usage.count < DAILY_PORTRAITS) {
       try {
         const portrait = await generatePortrait(
           forecast.senderName,
-          fallback.src,
+          senderPhotos.map((item) => item.src),
           body.answers || {},
           forecast.recipientName,
-          partner?.src || ""
+          recipientPhotos.map((item) => item.src)
         );
         if (portrait) {
           let src = `data:${portrait.contentType};base64,${portrait.buffer.toString("base64")}`;
@@ -52,7 +59,7 @@ export default async function handler(req, res) {
             src,
             focus: "center 35%",
             generated: true,
-            alt: partner ? `${forecast.senderName} and ${forecast.recipientName}` : forecast.senderName
+            alt: recipientPhotos.length ? `${forecast.senderName} and ${forecast.recipientName}` : forecast.senderName
           };
           usage.count += 1;
           if (usage.all) await markUsage(forecast.slug, usage).catch(() => {});
