@@ -2122,10 +2122,13 @@
       nextRevealPhoto = null;
       if (!photo || !photo.src) return;
       const image = document.createElement("img");
-      image.alt = currentPerson.full;
+      image.alt = photo.alt || currentPerson.full;
       image.draggable = false;
       image.style.objectPosition = photo.focus || "center";
       image.addEventListener("load", () => {
+        if (photo.generated && image.naturalWidth > image.naturalHeight) {
+          image.style.aspectRatio = "4 / 3";
+        }
         slot.hidden = image.naturalWidth <= 0;
       });
       image.addEventListener("error", () => {

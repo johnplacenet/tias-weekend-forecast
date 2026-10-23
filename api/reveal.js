@@ -29,11 +29,18 @@ export default async function handler(req, res) {
       return;
     }
     const fallback = pickPhoto(forecast.senderPhotos || []);
+    const partner = pickPhoto(forecast.recipientPhotos || []);
     const usage = await usageFor(forecast.slug).catch(() => ({ day: "", count: DAILY_PORTRAITS, all: null }));
     let photo = fallback ? { src: fallback.src, focus: fallback.focus || "center 30%", generated: false } : null;
     if (fallback && usage.count < DAILY_PORTRAITS) {
       try {
-        const portrait = await generatePortrait(forecast.senderName, fallback.src, body.answers || {});
+        const portrait = await generatePortrait(
+          forecast.senderName,
+          fallback.src,
+          body.answers || {},
+          forecast.recipientName,
+          partner?.src || ""
+        );
         if (portrait) {
           let src = `data:${portrait.contentType};base64,${portrait.buffer.toString("base64")}`;
           try {
@@ -41,7 +48,12 @@ export default async function handler(req, res) {
           } catch (error) {
             src = `data:${portrait.contentType};base64,${portrait.buffer.toString("base64")}`;
           }
-          photo = { src, focus: "center 30%", generated: true };
+          photo = {
+            src,
+            focus: "center 35%",
+            generated: true,
+            alt: partner ? `${forecast.senderName} and ${forecast.recipientName}` : forecast.senderName
+          };
           usage.count += 1;
           if (usage.all) await markUsage(forecast.slug, usage).catch(() => {});
         }
@@ -51,7 +63,12 @@ export default async function handler(req, res) {
     }
     json(res, 200, {
       senderName: forecast.senderName,
-      photo: photo ? { src: photo.src, focus: photo.focus || "center 30%", generated: Boolean(photo.generated) } : null
+      photo: photo ? {
+        src: photo.src,
+        focus: photo.focus || "center 30%",
+        generated: Boolean(photo.generated),
+        alt: photo.alt || ""
+      } : null
     });
   } catch (error) {
     json(res, 400, { error: "The forecast could not be painted." });
