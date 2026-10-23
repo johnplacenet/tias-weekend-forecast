@@ -230,12 +230,29 @@
         copyBtn.className = "copy";
         copyBtn.textContent = "Copy";
         copyBtn.addEventListener("click", async () => {
+          let copied = false;
           try {
             await navigator.clipboard.writeText(url);
-            copyBtn.textContent = "Copied";
+            copied = true;
           } catch (error) {
-            copyBtn.textContent = "Select the link";
+            const area = document.createElement("textarea");
+            area.value = url;
+            area.setAttribute("readonly", "");
+            area.style.position = "fixed";
+            area.style.opacity = "0";
+            document.body.append(area);
+            area.select();
+            try { copied = document.execCommand("copy"); } catch (err) { copied = false; }
+            area.remove();
           }
+          if (!copied) {
+            const range = document.createRange();
+            range.selectNodeContents(address);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+          copyBtn.textContent = copied ? "Copied" : "Highlighted";
         });
         const link = document.createElement("a");
         link.className = "link";
