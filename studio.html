@@ -112,6 +112,12 @@
           <div>
             <label for="recipientName">Their name</label>
             <input id="recipientName" required placeholder="Jennifer">
+            <label for="recipientGender">They're a</label>
+            <select id="recipientGender">
+              <option value="woman">Woman</option>
+              <option value="man">Man</option>
+            </select>
+            <p class="muted">A woman hears about the man of her dreams. A man hears about the woman of his dreams.</p>
           </div>
           <div>
             <label for="senderName">Your name</label>
@@ -134,6 +140,7 @@
           <div>
             <label for="contactPhone">Your phone</label>
             <input id="contactPhone" type="tel" placeholder="(954) 555-1212">
+            <p class="muted">Call and Text show up only after this number is saved.</p>
           </div>
         </div>
         <div class="actions">
@@ -337,6 +344,7 @@
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             recipientName: document.getElementById("recipientName").value,
+            recipientGender: document.getElementById("recipientGender").value,
             senderName: document.getElementById("senderName").value,
             contactOptIn: document.getElementById("contactOptIn").checked,
             contactEmail: document.getElementById("contactEmail").value,

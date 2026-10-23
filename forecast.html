@@ -1101,13 +1101,13 @@
         <div class="hero-cloud"></div>
       </div>
       <h1 id="forecastTitle" tabindex="-1">THE PERFECT DATE</h1>
-      <p class="tagline">Find out who your perfect date is.</p>
+      <p class="tagline" id="openTagline">Let's create the man of your dreams.</p>
       <ul class="preview-steps">
         <li>Your Type</li>
         <li>Your Vibe</li>
-        <li>Your Weekend</li>
+        <li id="previewDream">The Date</li>
       </ul>
-      <button type="button" id="startBtn" class="btn btn-coral">Find My Perfect Date</button>
+      <button type="button" id="startBtn" class="btn btn-coral">Find the man of my dreams</button>
       <p class="fine">Three quick steps. About a minute.</p>
     </section>
 
@@ -1116,7 +1116,7 @@
       <ol class="progress" id="progress">
         <li class="progress-item is-current" aria-current="step" aria-label="Step 1, Your Type"><span aria-hidden="true">1</span>Your Type</li>
         <li class="progress-item" aria-label="Step 2, Your Vibe"><span aria-hidden="true">2</span>Your Vibe</li>
-        <li class="progress-item" aria-label="Step 3, Your Weekend"><span aria-hidden="true">3</span>Your Weekend</li>
+        <li class="progress-item" id="progressDream" aria-label="Step 3, The Date"><span aria-hidden="true">3</span>The Date</li>
       </ol>
       <div id="quizRoot"></div>
       <div class="quiz-nav">
@@ -1127,7 +1127,7 @@
 
     <section id="screen-search" class="screen panel" hidden>
       <div class="flash" aria-hidden="true"></div>
-      <p class="radar-label">Weekend radar</p>
+      <p class="radar-label" id="radarLabel">Just for you</p>
       <div class="radar" aria-hidden="true">
         <div class="radar-sweep"></div>
         <span class="blip" style="top: 32%; left: 62%"></span>
@@ -1149,9 +1149,9 @@
       </div>
     </section>
 
-    <p id="disclaimer" class="disclaimer" hidden>For entertainment. The forecast may be slightly biased.</p>
+    <p id="disclaimer" class="disclaimer" hidden>Made with a little bias, and a lot of hope.</p>
     <noscript>
-      <p class="disclaimer noscript-note">Turn on JavaScript to check your weekend forecast.</p>
+      <p class="disclaimer noscript-note">Turn on JavaScript to meet your perfect date.</p>
     </noscript>
   </main>
   <div id="confetti" aria-hidden="true"></div>
@@ -1221,30 +1221,66 @@
       flash: "thunder"
     };
 
-    const FIRST_SEARCH_MESSAGES = [
-      "Reading your romantic atmosphere",
-      "Checking for chemistry",
-      "Your perfect date is ready"
-    ];
+    let dreamMatch = dreamWords("woman");
+
+    function dreamWords(gender) {
+      if (gender === "man") {
+        return {
+          noun: "woman",
+          pronoun: "She",
+          object: "her",
+          tagline: "Let's create the woman of your dreams.",
+          start: "Find the woman of my dreams",
+          reveal: "Meet the woman of my dreams",
+          kicker: "The woman of your dreams",
+          line: "She was worth the wait.",
+          search: [
+            "Creating the woman of your dreams",
+            "She sounds wonderful",
+            "Almost ready to meet her"
+          ]
+        };
+      }
+      return {
+        noun: "man",
+        pronoun: "He",
+        object: "him",
+        tagline: "Let's create the man of your dreams.",
+        start: "Find the man of my dreams",
+        reveal: "Meet the man of my dreams",
+        kicker: "The man of your dreams",
+        line: "He was worth the wait.",
+        search: [
+          "Creating the man of your dreams",
+          "He sounds wonderful",
+          "Almost ready to meet him"
+        ]
+      };
+    }
+
+    function applyDream(gender) {
+      dreamMatch = dreamWords(gender);
+      const tagline = document.getElementById("openTagline");
+      if (tagline) tagline.textContent = dreamMatch.tagline;
+      if (startBtn) startBtn.textContent = dreamMatch.start;
+      const radar = document.getElementById("radarLabel");
+      if (radar) radar.textContent = "Just for you";
+    }
 
     const LATER_SEARCH_MESSAGES = [
-      "Expanding the dating radius",
-      "Checking neighboring zip codes",
-      "Searching another time zone",
-      "Consulting a second meteorologist",
-      "Even the satellite is confused"
+      "Looking once more, just for you",
+      "The good answer stays the same",
+      "Still someone wonderful"
     ];
 
     const ANYONE_ELSE_MESSAGES = [
-      "Expanding the dating radius",
-      "Checking neighboring zip codes",
-      "Searching another time zone",
-      "Consulting a second meteorologist",
-      "Even the satellite is confused"
+      "Looking for someone else",
+      "Giving the wish one more try",
+      "The heart is very sure"
     ];
 
     const RESPECT_LINE = "We respect your request.";
-    const ATMOSPHERE_LINE = "Unfortunately, the atmosphere does not.";
+    const ATMOSPHERE_LINE = "The perfect match does not.";
     const NO_PREFERENCE_JOKE = "You left it up to fate. Fate apparently knows John.";
     const AGE_JOKE = "You set an age range. John has been in range this whole time.";
 
@@ -1272,9 +1308,9 @@
         id: "premiere",
         theme: "premiere",
         layout: "premiere",
-        kicker: "Your perfect date",
+        kicker: "The man of your dreams",
         name: "JOHN PLACE",
-        lines: ["100% chance of John.", "Your weekend just got a little more interesting."]
+        lines: ["100% chance of {FIRST}.", "He was worth the wait."]
       },
       {
         id: "classified",
@@ -1626,8 +1662,8 @@
         ]
       },
       {
-        title: "Your Weekend",
-        lede: "How should the weekend feel?",
+        title: "The Date",
+        lede: "How should it feel?",
         blocks: [
           {
             kind: "choices",
@@ -2467,6 +2503,13 @@
     }
 
     async function present(result, joke) {
+      if (result.id === "premiere") {
+        result = {
+          ...result,
+          kicker: dreamMatch.kicker,
+          lines: ["100% chance of {FIRST}.", dreamMatch.line]
+        };
+      }
       Array.from(resultPanel.classList).forEach((className) => {
         if (className.startsWith("theme-")) resultPanel.classList.remove(className);
       });
@@ -2538,7 +2581,11 @@
     }
 
     async function waitForReveal() {
-      const extra = ["Painting your weekend", "Matching a face to the forecast", "Clearing the last clouds"];
+      const extra = [
+        `Creating the ${dreamMatch.noun} of your dreams`,
+        "Matching a face to the feeling",
+        `${dreamMatch.pronoun} is almost here`
+      ];
       let step = 0;
       const deadline = Date.now() + 22000;
       while (Date.now() < deadline) {
@@ -2576,12 +2623,13 @@
           stepMs = 850;
           pauseMs = 1300;
         } else if (searchesStarted === 0) {
-          messages = FIRST_SEARCH_MESSAGES;
+          messages = dreamMatch.search;
         } else {
           messages = laterTrio();
         }
         await playSequence(messages, stepMs, pauseMs);
         const reveal = await waitForReveal();
+        if (reveal && reveal.recipientGender) applyDream(reveal.recipientGender);
         if (reveal && reveal.senderName) setPerson(reveal.senderName);
         else if (forecastSlug !== "tia") setPerson("Your date");
         if (reveal && reveal.photo && reveal.photo.src) nextRevealPhoto = reveal.photo;
@@ -2669,7 +2717,7 @@
         panel.hidden = panelIndex !== index;
       });
       document.getElementById("stepCount").textContent = `Step ${index + 1} of 3`;
-      nextBtn.textContent = index === STEPS.length - 1 ? "Reveal My Perfect Date" : "Next";
+      nextBtn.textContent = index === STEPS.length - 1 ? dreamMatch.reveal : "Next";
       document.querySelectorAll(".progress-item").forEach((item, itemIndex) => {
         item.classList.toggle("is-current", itemIndex === index);
         item.classList.toggle("is-done", itemIndex < index);
@@ -2868,6 +2916,7 @@
     let forecastAccount = route.account;
     if (!forecastSlug) location.replace("/");
     if (forecastSlug === "tia" && !forecastAccount) {
+      applyDream("woman");
       recipientList = TIA_PHOTOS;
       TIA_PHOTOS.forEach((photo) => {
         const image = new Image();
@@ -2886,6 +2935,7 @@
       .then((forecast) => {
         if (!forecast) return;
         applyBranding(forecast.recipientName);
+        applyDream(forecast.recipientGender);
         useRecipientPhotos(forecast.recipientPhotos);
       })
       .catch(() => {});

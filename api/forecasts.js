@@ -89,6 +89,7 @@ export default async function handler(req, res) {
       contactOptIn: contact.contactOptIn,
       contactEmail: contact.contactEmail,
       contactPhone: contact.contactPhone,
+      recipientGender: body.recipientGender === "man" ? "man" : "woman",
       updatedAt: new Date().toISOString()
     };
     await saveForecast(forecast);

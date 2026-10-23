@@ -65,6 +65,7 @@ export default async function handler(req, res) {
     }
     json(res, 200, {
       senderName: forecast.senderName,
+      recipientGender: forecast.recipientGender === "man" ? "man" : "woman",
       contact: publicContact(forecast),
       photo: photo ? {
         src: photo.src,
