@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Perfect Date</title>
-  <meta name="description" content="A funny way to ask someone out. They open your link, answer a few questions, and the date is you.">
+  <meta name="description" content="Ask someone out with a link. They picture the man or woman of their dreams, and the match is you.">
   <link rel="canonical" href="https://date.thecre8iveplace.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,90 +17,154 @@
       min-height: 100vh;
       font-family: Fredoka, "Avenir Next", "Trebuchet MS", sans-serif;
       color: var(--ink);
-      background: linear-gradient(165deg, #8fd8ff 0%, #d9c6ff 34%, #ffd0e4 62%, #ffe38a 100%);
+      background:
+        radial-gradient(circle at 12% 8%, #fff 0 40px, transparent 42px),
+        radial-gradient(circle at 88% 18%, #ffe38a 0 54px, transparent 56px),
+        linear-gradient(165deg, #8fd8ff 0%, #d9c6ff 34%, #ffd0e4 62%, #ffe38a 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      left: -40px;
+      right: -40px;
+      bottom: -80px;
+      height: 220px;
+      background:
+        radial-gradient(120px 80px at 18% 100%, transparent 68px, #ff8fab 70px 84px, transparent 86px),
+        radial-gradient(120px 80px at 42% 100%, transparent 68px, #ffd93d 70px 84px, transparent 86px),
+        radial-gradient(120px 80px at 66% 100%, transparent 68px, #2ec4b6 70px 84px, transparent 86px),
+        radial-gradient(120px 80px at 90% 100%, transparent 68px, #8d62e6 70px 84px, transparent 86px);
+      pointer-events: none;
     }
     main {
-      width: min(720px, calc(100% - 28px));
-      margin: 28px auto 48px;
+      width: min(1040px, calc(100% - 28px));
+      margin: 28px auto 80px;
+    }
+    .hero, .story {
       background: rgba(255, 252, 250, 0.94);
       border-radius: 32px;
-      padding: 28px 22px 32px;
       box-shadow: 0 22px 50px rgba(73, 28, 78, 0.16);
     }
+    .hero { padding: 32px 22px 28px; text-align: center; }
     .eyebrow {
       margin: 0 0 8px;
-      text-align: center;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--coral);
       font-weight: 700;
     }
     h1 {
-      margin: 0 0 12px;
-      text-align: center;
-      font-size: clamp(2.6rem, 10vw, 4.4rem);
-      line-height: 0.92;
-      letter-spacing: -0.04em;
+      margin: 0 auto 12px;
+      max-width: 14ch;
+      font-size: clamp(2.8rem, 8vw, 5.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.045em;
     }
-    .lede { margin: 0 0 22px; text-align: center; font-size: 1.25rem; }
-    ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-    li {
-      background: white;
-      border-radius: 22px;
-      padding: 14px 16px;
-      box-shadow: 0 8px 0 rgba(43, 33, 64, 0.06);
+    .lede {
+      margin: 0 auto;
+      max-width: 38rem;
+      font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+      color: var(--soft);
     }
-    strong { display: block; font-size: 1.15rem; }
-    p { margin: 6px 0 0; color: var(--soft); }
     a.btn {
-      display: block;
+      display: inline-block;
       margin-top: 22px;
-      text-align: center;
       text-decoration: none;
       color: white;
       background: linear-gradient(180deg, #ff8d9a, var(--coral));
       border-radius: 999px;
-      padding: 16px 18px;
+      padding: 16px 28px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       box-shadow: 0 6px 0 #c2184e;
     }
-    .price {
-      margin: 18px 0 0;
-      text-align: center;
-      color: var(--ink);
-      font-weight: 700;
-      font-size: 1.15rem;
+    .fine { margin: 10px 0 0; color: var(--soft); }
+    .phones {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
     }
-    .fine { text-align: center; color: var(--soft); }
+    .shot {
+      background: white;
+      border-radius: 28px;
+      padding: 14px 14px 16px;
+      box-shadow: 0 12px 0 rgba(43, 33, 64, 0.06);
+      text-align: left;
+    }
+    .shot img {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 18px;
+      background: #fff6fb;
+    }
+    .shot strong { display: block; margin-top: 12px; font-size: 1.15rem; }
+    .shot p { margin: 4px 0 0; color: var(--soft); }
+    .story { margin-top: 18px; padding: 8px 22px 22px; }
+    .story article {
+      display: grid;
+      gap: 8px;
+      padding: 18px 0;
+      border-bottom: 2px solid #ffe4ec;
+    }
+    .story article:last-child { border-bottom: 0; }
+    .story h2 { margin: 0; font-size: 1.45rem; }
+    .story p { margin: 0; color: var(--soft); font-size: 1.08rem; }
+    .price {
+      margin: 8px 0 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .phones { grid-template-columns: 1fr; }
+      .shot img { aspect-ratio: 9 / 13; }
+    }
   </style>
 </head>
 <body>
   <main>
-    <p class="eyebrow">The perfect date</p>
-    <h1>Ask someone out with a link.</h1>
-    <p class="lede">A funny way to ask one person out. They picture the man or woman of their dreams, and the match is you.</p>
-    <ol>
-      <li>
-        <strong>Put their name and photos on the front.</strong>
-        <p>That is the page they open. Your name stays off it.</p>
-      </li>
-      <li>
-        <strong>They answer three short questions.</strong>
-        <p>Their type, their vibe, and the kind of weekend they want. About a minute.</p>
-      </li>
-      <li>
-        <strong>Your name is the match.</strong>
-        <p>They see a picture of both of you. The quiz chooses the scene. The faces stay yours.</p>
-      </li>
-      <li>
-        <strong>They can reach you right then.</strong>
-        <p>Turn on text or email and those buttons show up after your name. Leave them off and the page stays a surprise.</p>
-      </li>
-    </ol>
-    <p class="price">One person is $2.99. Five are $12. Ten are $20.</p>
-    <a class="btn" href="/studio">Make a link</a>
-    <p class="fine">Sign-in is set up by an admin.</p>
+    <section class="hero">
+      <p class="eyebrow">The perfect date</p>
+      <h1>Ask someone out with a link.</h1>
+      <p class="lede">They picture the man or woman of their dreams. Three short questions later, the match is you, in a picture of the two of you.</p>
+      <a class="btn" href="/studio">Make a link</a>
+      <p class="fine">One person is $2.99. Five are $12. Ten are $20.</p>
+      <div class="phones">
+        <figure class="shot">
+          <img src="/landing/open.jpg" alt="Sophia's page, with her photo and a button to find her perfect date.">
+          <strong>Their name is on the front.</strong>
+          <p>Add their photos. That is the page they open. Your name stays hidden.</p>
+        </figure>
+        <figure class="shot">
+          <img src="/landing/quiz.png" alt="A short quiz about type, vibe, and the kind of date they want.">
+          <strong>They dream for a minute.</strong>
+          <p>Type, vibe, and the date they want. Skip anything. It takes about a minute.</p>
+        </figure>
+        <figure class="shot">
+          <img src="/landing/reveal.png" alt="The reveal, with a picture of the couple and the sender's name.">
+          <strong>Then it is you.</strong>
+          <p>Your name, a picture of both of you, and a way to call, text, or email.</p>
+        </figure>
+      </div>
+    </section>
+    <section class="story">
+      <article>
+        <h2>You choose who the dream is for.</h2>
+        <p>Send it to a woman and she hears about the man of her dreams. Send it to a man and he hears about the woman of his dreams.</p>
+      </article>
+      <article>
+        <h2>The picture uses both of your faces.</h2>
+        <p>The quiz picks the scene. The faces stay close to the photos you upload.</p>
+      </article>
+      <article>
+        <h2>They can reach you the moment they see your name.</h2>
+        <p>Turn on call, text, and email. On a phone, each button opens that app. Leave them off and the page stays a surprise.</p>
+      </article>
+      <p class="price">Sign-in is set up by an admin.</p>
+    </section>
   </main>
   <script>
     if (location.hostname === "tia.thecre8iveplace.com" && (location.pathname === "/" || location.pathname === "")) {
