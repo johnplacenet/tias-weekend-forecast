@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Find out who your perfect date is.">
+  <meta name="theme-color" content="#ff8fab">
+  <meta name="color-scheme" content="light">
+  <meta property="og:title" content="The Perfect Date">
+  <meta property="og:description" content="Find out who your perfect date is.">
+  <meta property="og:url" content="https://date.thecre8iveplace.com/f/tia">
+  <link rel="canonical" href="https://date.thecre8iveplace.com/f/tia">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff8fab'/%3E%3Ccircle cx='32' cy='28' r='12' fill='%23ffd93d'/%3E%3Cpath d='M10 50c8-8 14-8 22 0s14 8 22 0' fill='none' stroke='%232ec4b6' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <title>The Perfect Date</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Easy color edits */
+    :root {
+      --coral: #ff6b6b;
+      --coral-deep: #ef3d66;
+      --coral-ink: #c2184e;
+      --sun: #ffd93d;
+      --sun-deep: #f0b429;
+      --aqua: #2ec4b6;
+      --aqua-deep: #0f8f86;
+      --lavender: #c4b5fd;
+      --lavender-deep: #7c5cbf;
+      --pink: #ff8fab;
+      --pink-deep: #ff5d8f;
+      --ink: #2b2140;
+      --ink-soft: #5e5472;
+      --paper: rgba(255, 252, 250, 0.94);
+      --edge: rgba(43, 33, 64, 0.08);
+      --shadow: 0 22px 50px rgba(73, 28, 78, 0.16);
+      --font: Fredoka, "Avenir Next", "Avenir Next Rounded", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      font-size: 18px;
+      line-height: 1.45;
+      color: var(--ink);
+      background: linear-gradient(165deg, #8fd8ff 0%, #d9c6ff 34%, #ffd0e4 62%, #ffe38a 100%);
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    p, h1, h2, h3 { margin-top: 0; }
+
+    :focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 6px var(--ink);
+    }
+
+    .sky {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sun-wrap {
+      position: absolute;
+      top: 18px;
+      right: 4%;
+      width: 150px;
+      height: 150px;
+    }
+
+    .rays {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg, rgba(255, 217, 61, 0.95) 0 7deg, transparent 7deg 20deg);
+      -webkit-mask: radial-gradient(circle, transparent 0 48%, #000 52%);
+      mask: radial-gradient(circle, transparent 0 48%, #000 52%);
+      animation: spin 36s linear infinite;
+    }
+
+    .sun {
+      position: absolute;
+      inset: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, var(--sun) 46%, #ffb703 100%);
+      box-shadow: 0 0 30px rgba(255, 183, 3, 0.7);
+    }
+
+    .cloud {
+      position: absolute;
+      background: #fff;
+      border-radius: 40px;
+      opacity: 0.92;
+      animation: drift 32s linear infinite;
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: "";
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .c1 { width: 120px; height: 42px; top: 12%; left: -8%; }
+    .c1::before { width: 46px; height: 46px; top: -24px; left: 18px; }
+    .c1::after { width: 64px; height: 64px; top: -34px; left: 46px; }
+    .c2 { width: 150px; height: 48px; top: 22%; right: -12%; animation-duration: 42s; animation-direction: reverse; }
+    .c2::before { width: 54px; height: 54px; top: -28px; left: 24px; }
+    .c2::after { width: 78px; height: 78px; top: -42px; left: 58px; }
+    .c3 { width: 90px; height: 34px; bottom: 18%; left: 6%; animation-duration: 38s; }
+    .c3::before { width: 36px; height: 36px; top: -18px; left: 14px; }
+    .c3::after { width: 48px; height: 48px; top: -26px; left: 36px; }
+    .c4 { width: 110px; height: 38px; bottom: 8%; right: 8%; animation-duration: 46s; animation-direction: reverse; }
+    .c4::before { width: 40px; height: 40px; top: -20px; left: 16px; }
+    .c4::after { width: 58px; height: 58px; top: -30px; left: 42px; }
+
+    .rainbow {
+      position: absolute;
+      left: -10%;
+      bottom: -20px;
+      width: 120%;
+      height: auto;
+      opacity: 0.55;
+    }
+
+    .bolt {
+      position: absolute;
+      width: 28px;
+      height: 46px;
+      opacity: 0.8;
+    }
+
+    .b1 { top: 16%; left: 8%; }
+    .b2 { bottom: 22%; right: 18%; width: 22px; height: 36px; opacity: 0.55; }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      width: min(720px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 22px 0 32px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border-radius: 32px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      padding: 28px 22px 22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .eyebrow {
+      display: table;
+      margin: 0 auto 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--coral-ink);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      text-align: center;
+      font-size: clamp(2.5rem, 11vw, 4.6rem);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+    }
+
+    .tagline {
+      text-align: center;
+      font-size: clamp(1.2rem, 4vw, 1.45rem);
+      margin: 0 0 18px;
+    }
+
+    .tia-frame {
+      position: relative;
+      width: min(250px, 68vw);
+      margin: 0 auto 14px;
+      aspect-ratio: 1;
+    }
+
+    .tia-frame .sun-wrap {
+      left: auto;
+      right: -16px;
+      top: -14px;
+      width: 96px;
+      height: 96px;
+      z-index: 0;
+    }
+
+    .tia-frame .sun { inset: 24px; }
+
+    .tia-frame img {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 32%;
+      border-radius: 32px;
+      border: 5px solid #fff;
+      box-shadow: 0 16px 30px rgba(43, 33, 64, 0.2);
+      background: #ffe8d6;
+      transition: opacity 0.35s ease;
+    }
+
+    .tia-frame img.is-out { opacity: 0; }
+
+    .hero-art {
+      position: relative;
+      height: 132px;
+      margin: 4px 0 8px;
+    }
+
+    .hero-art .sun-wrap { right: auto; left: 50%; top: 0; transform: translateX(-50%); width: 120px; height: 120px; }
+    .hero-art .sun { inset: 28px; }
+    .hero-cloud {
+      position: absolute;
+      left: 12%;
+      bottom: 18px;
+      width: 78px;
+      height: 28px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 28px -16px 0 8px #fff, 58px -6px 0 2px #fff;
+    }
+
+    .preview-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+    }
+
+    .preview-steps li {
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 3px solid transparent;
+    }
+
+    .preview-steps li:nth-child(1) { border-color: var(--coral); }
+    .preview-steps li:nth-child(2) { border-color: var(--lavender-deep); }
+    .preview-steps li:nth-child(3) { border-color: var(--aqua); }
+
+    .fine {
+      text-align: center;
+      color: var(--ink-soft);
+      margin: 14px 0 0;
+      font-size: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      line-height: 1.2;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 6px 0 var(--btn-edge);
+    }
+
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--btn-edge); }
+    .btn:disabled { cursor: default; }
+
+    .btn-coral { --btn-edge: #c2184e; background: linear-gradient(180deg, #ff8d9a, var(--coral-deep)); }
+    .btn-aqua { --btn-edge: #0b6e68; background: linear-gradient(180deg, #63e4d8, var(--aqua-deep)); }
+    .btn-lavender { --btn-edge: #5b32b3; background: linear-gradient(180deg, #d5c4ff, #6d46d4); }
+    .btn-ghost {
+      --btn-edge: #e4d8f3;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .step-count {
+      margin: 0 0 10px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--coral-ink);
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+    }
+
+    .progress-item {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink-soft);
+    }
+
+    .progress-item span {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      margin: 0 auto 6px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid #eadff8;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    .progress-item.is-current { color: var(--ink); }
+    .progress-item.is-current span { background: var(--coral-deep); border-color: var(--coral-ink); color: #fff; }
+    .progress-item.is-done span { background: var(--aqua-deep); border-color: #0b6e68; color: #fff; }
+
+    .step-title {
+      margin: 0 0 6px;
+      font-size: clamp(2rem, 6vw, 2.6rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .lede, .hint { color: var(--ink-soft); margin: 0 0 14px; }
+    .hint { margin: -4px 0 10px; font-size: 1rem; }
+
+    .block { margin: 0 0 20px; }
+    .block h3 { margin: 0 0 8px; font-size: 1.2rem; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .chip, .choice {
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      border: 3px solid #eadff8;
+      min-height: 48px;
+      padding: 10px 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 0 var(--edge);
+      max-width: 100%;
+      min-width: 0;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .chip:nth-child(5n + 1) { border-color: var(--coral); }
+    .chip:nth-child(5n + 2) { border-color: var(--sun-deep); }
+    .chip:nth-child(5n + 3) { border-color: var(--aqua); }
+    .chip:nth-child(5n + 4) { border-color: var(--lavender-deep); }
+    .chip:nth-child(5n + 5) { border-color: var(--pink-deep); }
+
+    .chip[aria-pressed="true"],
+    .choice[aria-pressed="true"] {
+      background: linear-gradient(180deg, #fff6c4, var(--sun));
+      border-color: var(--sun-deep);
+      box-shadow: 0 5px 0 var(--sun-deep);
+    }
+
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .choice {
+      position: relative;
+      text-align: left;
+      border-radius: 22px;
+      min-height: 96px;
+      padding: 14px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .choice[aria-pressed="true"]::after {
+      content: "";
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 8px;
+      height: 14px;
+      border: solid var(--coral-ink);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+
+    .choice-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #fff1f5;
+    }
+
+    .choice-icon svg { width: 30px; height: 30px; display: block; }
+    .choice-label { font-size: 1rem; line-height: 1.2; }
+
+    .readout {
+      margin: 0 0 8px;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .wish {
+      width: 100%;
+      min-height: 128px;
+      border: 3px solid #eadff8;
+      border-radius: 22px;
+      padding: 14px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+      resize: vertical;
+    }
+
+    .slider-label { display: block; margin: 10px 0 6px; font-weight: 700; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 18px;
+      border-radius: 999px;
+      background: #efe7fb;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--coral-deep);
+      box-shadow: 0 2px 0 rgba(43, 33, 64, 0.12);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--coral-deep);
+      cursor: pointer;
+    }
+
+    .ticks {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .quiz-nav { display: grid; gap: 10px; margin-top: 8px; }
+
+    #screen-search {
+      min-height: min(70vh, 640px);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #screen-search:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-label {
+      margin: 0 0 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--aqua-deep);
+      font-size: 0.95rem;
+    }
+
+    .radar {
+      width: min(240px, 68vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle, rgba(184, 255, 231, 0.95) 0 6px, transparent 7px),
+        repeating-radial-gradient(circle, transparent 0 28px, rgba(184, 255, 231, 0.45) 29px 31px),
+        #07323a;
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.45), 0 16px 40px rgba(7, 50, 58, 0.25);
+    }
+
+    .radar-sweep {
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(from 0deg, transparent 0 70%, rgba(184, 255, 231, 0.9) 88%, transparent 100%);
+      animation: spin 1.7s linear infinite;
+    }
+
+    .blip {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d9fff4;
+      box-shadow: 0 0 10px #d9fff4;
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    .storm .radar {
+      background:
+        radial-gradient(circle, rgba(255, 180, 200, 0.95) 0 6px, transparent 7px),
+        repeating-radial-gradient(circle, transparent 0 28px, rgba(255, 180, 200, 0.35) 29px 31px),
+        #3a1430;
+      box-shadow: 0 0 0 8px rgba(255, 180, 200, 0.35), 0 16px 40px rgba(40, 10, 30, 0.28);
+    }
+
+    .storm .radar-sweep {
+      background: conic-gradient(from 0deg, transparent 0 64%, rgba(255, 120, 160, 0.95) 86%, transparent 100%);
+      animation-duration: 0.75s;
+    }
+
+    .storm .blip { background: #ffd0e0; box-shadow: 0 0 10px #ffd0e0; }
+    .storm .radar-label { color: var(--coral-ink); }
+
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .storm .flash { animation: zap 1.15s steps(2, end) infinite; }
+
+    .search-message {
+      min-height: 4.6em;
+      margin: 20px 0 0;
+      font-size: clamp(1.4rem, 4.4vw, 2rem);
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+
+    .search-message.is-punch { font-size: clamp(1.6rem, 5vw, 2.3rem); }
+
+    .search-progress {
+      width: min(280px, 80%);
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    #searchProgress {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--coral-deep), var(--sun));
+      transition: width 0.35s ease;
+    }
+
+    .photo-slot { margin: 0 0 14px; }
+    .photo-slot img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      max-height: 460px;
+      object-fit: cover;
+      border-radius: 22px;
+      box-shadow: 0 14px 30px rgba(43, 33, 64, 0.18);
+      animation: name-pop 0.45s cubic-bezier(0.2, 0.85, 0.2, 1);
+    }
+
+    .kicker {
+      margin: 0 0 8px;
+      text-align: center;
+      color: var(--coral-ink);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+
+    .name {
+      margin: 0;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      font-size: clamp(2.15rem, 8vw, 4.1rem);
+      text-wrap: balance;
+      overflow-wrap: break-word;
+    }
+
+    .name.long {
+      font-size: clamp(1.55rem, 5.6vw, 2.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .name.stack span {
+      display: block;
+      font-size: clamp(3rem, 14vw, 5.3rem);
+      line-height: 0.88;
+    }
+
+    .forecast-line {
+      text-align: center;
+      font-size: 1.22rem;
+      margin: 12px 0 0;
+      text-wrap: balance;
+    }
+
+    .forecast-soft { opacity: 0.82; font-size: 1.05rem; }
+
+    .meter { margin-top: 16px; }
+    .meter-top { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; margin-bottom: 6px; }
+    .meter-track { height: 16px; border-radius: 999px; background: rgba(43, 33, 64, 0.12); overflow: hidden; }
+    .meter-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--coral-deep), var(--sun));
+      transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      border-radius: 18px;
+      padding: 12px 14px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .note-label {
+      margin: 0 0 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--lavender-deep);
+    }
+
+    .note-copy { margin: 0; }
+
+    .actions { display: grid; gap: 12px; margin-top: 18px; }
+
+    .hero-sun, .theme-premiere .hero-sun {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff, var(--sun) 50%, #ffb703);
+      box-shadow: 0 0 0 10px rgba(255, 217, 61, 0.35);
+    }
+
+    .hero-art .hero-sun { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); margin: 0; }
+
+    .hazard-bar {
+      height: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: repeating-linear-gradient(90deg, #2b2140 0 14px, var(--sun) 14px 28px);
+    }
+
+    .heat-flag, .on-air, .live-pill {
+      display: table;
+      margin: 0 auto 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--coral-deep);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .on-air { background: #0f6e9b; }
+
+    .swirl, .mini-radar {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .swirl {
+      background:
+        radial-gradient(circle, #dff9ff 0 16%, transparent 17%),
+        repeating-conic-gradient(from 0deg, #127489 0 12deg, #e7fbff 12deg 20deg);
+      animation: spin 3.5s linear infinite;
+    }
+
+    .mini-radar {
+      background:
+        radial-gradient(circle, rgba(184, 255, 231, 0.95) 0 5px, transparent 6px),
+        repeating-radial-gradient(circle, transparent 0 14px, rgba(184, 255, 231, 0.4) 15px 16px),
+        #062a32;
+    }
+
+    .crown { width: 84px; margin: 0 auto 6px; }
+    .crown svg { width: 100%; height: auto; display: block; }
+
+    .seal {
+      width: 108px;
+      height: 108px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 40% 35%, #fff6c8, #f0b429 55%, #d88912);
+      color: #6a3b00;
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.8), 0 0 0 12px #f0b429;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .breaking-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--coral-deep);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      animation: blink 1s steps(2, end) infinite;
+    }
+
+    .now-showing {
+      text-align: center;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--sun);
+      font-size: 0.9rem;
+      margin: 0 0 8px;
+    }
+
+    .letter-heading, .slot-heading { margin: 0; }
+
+    .board-row { display: flex; justify-content: center; gap: 6px; margin: 4px 0; }
+
+    .tile {
+      width: clamp(28px, 8vw, 48px);
+      height: clamp(38px, 10vw, 60px);
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(#3a3128, #16120f 55%);
+      color: transparent;
+      font-weight: 700;
+      font-size: clamp(1rem, 4vw, 1.55rem);
+      box-shadow: inset 0 -7px 0 rgba(0, 0, 0, 0.35), 0 2px 0 #000;
+    }
+
+    .tile.show { color: #ffe7a3; }
+
+    .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+    .reel {
+      display: block;
+      height: 64px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #140910;
+      box-shadow: inset 0 0 0 4px var(--sun);
+    }
+
+    .reel-strip { display: block; }
+    .reel-item {
+      height: 64px;
+      display: grid;
+      place-items: center;
+      color: #ffe7a3;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: clamp(0.95rem, 3.4vw, 1.25rem);
+    }
+
+    .days { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .day {
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      border-radius: 16px;
+      padding: 12px 6px;
+      text-align: center;
+    }
+    .dow, .cond { margin: 0; font-size: 0.85rem; font-weight: 700; color: var(--ink-soft); }
+    .who { margin: 4px 0; font-size: clamp(1.1rem, 4vw, 1.45rem); font-weight: 700; color: var(--coral-ink); }
+
+    .stamp-row { display: flex; justify-content: flex-end; }
+    .stamp {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 3px dashed var(--coral-deep);
+      color: var(--coral-deep);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transform: rotate(12deg);
+    }
+
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .stats div { background: #fff; border-radius: 14px; padding: 8px 6px; text-align: center; }
+    .stats dt { font-size: 0.78rem; color: var(--ink-soft); }
+    .stats dd { margin: 2px 0 0; font-weight: 700; font-size: 1rem; }
+
+    .map {
+      height: 92px;
+      margin-bottom: 8px;
+      position: relative;
+      background:
+        radial-gradient(circle at 22% 48%, var(--aqua) 0 6px, transparent 7px),
+        radial-gradient(circle at 46% 32%, var(--lavender-deep) 0 6px, transparent 7px),
+        radial-gradient(circle at 74% 58%, var(--coral-deep) 0 7px, transparent 8px),
+        radial-gradient(circle at 80% 26%, var(--sun-deep) 0 5px, transparent 6px),
+        linear-gradient(#e7fbff, #fff);
+      border-radius: 18px;
+    }
+
+    .map i {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50% 50% 50% 0;
+      background: var(--coral-deep);
+      left: 70%;
+      top: 42%;
+      transform: rotate(-45deg);
+    }
+
+    .moon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: #fff6d0;
+      box-shadow: inset -16px -8px 0 #f0c96a, 0 0 24px rgba(255, 244, 200, 0.85);
+    }
+
+    .mini-rainbow, .flash-bolt { display: block; margin: 0 auto 8px; }
+    .mini-rainbow { width: min(220px, 70%); height: auto; }
+    .flash-bolt { width: 42px; height: auto; }
+
+    .theme-premiere { background: linear-gradient(180deg, #fff, #fff1f5 58%, #fff7e4); }
+    .theme-premiere .name { color: var(--coral-deep); }
+    .theme-alert { background: linear-gradient(180deg, #fff, #fff6e8); }
+    .theme-stacked { background: linear-gradient(180deg, #f7f2ff, #ffe8f3); }
+    .theme-stacked .name { color: #7a3ff0; }
+    .theme-heat { background: linear-gradient(180deg, #fff8d2, #ffe08a); }
+    .theme-heat .name { color: #9d123c; }
+    .theme-hurricane {
+      background: radial-gradient(circle at 50% 18%, #1c7c8a, #0c2f3a 62%);
+      color: #f3fffc;
+    }
+    .theme-royal { background: linear-gradient(180deg, #fffaf0, #f8e7c0); }
+    .theme-royal .name { font-family: Palatino, "Palatino Linotype", Georgia, serif; color: #6d4c1c; letter-spacing: 0; }
+    .theme-letterboard { background: #16120f; color: #ffe7a3; }
+    .theme-slot { background: linear-gradient(180deg, #7a1d3a, #3a1020); color: #fff8ef; }
+    .theme-tropical {
+      background: linear-gradient(180deg, #fff8ef, #d9fff8);
+      border: 4px dashed var(--aqua-deep);
+    }
+    .theme-tropical .name { color: #0f6e68; }
+    .theme-news { background: #140f24; color: #fff; }
+    .theme-movie {
+      background: #0c0a10;
+      color: #fff;
+      padding-top: 46px;
+      padding-bottom: 40px;
+      box-shadow: inset 0 18px 0 #000, inset 0 -18px 0 #000, var(--shadow);
+    }
+    .theme-fakeout { background: #f3f1f6; }
+    .theme-fakeout .fake-name { color: #8b849c; text-decoration: line-through; text-decoration-thickness: 4px; }
+    .theme-fakeout.is-revealed { background: linear-gradient(180deg, #fff, #ffe3ee); }
+    .theme-fakeout.is-revealed .name { color: var(--coral-deep); text-decoration: none; }
+    .theme-award { background: radial-gradient(circle at 50% 0%, #fff4cc, #fff 58%); }
+    .theme-award .name { color: #8a5a00; }
+    .theme-science {
+      background-color: #f7f8ff;
+      background-image: linear-gradient(rgba(124, 92, 191, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 92, 191, 0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .theme-error { background: #1b1028; color: #d8ffe8; }
+    .theme-error .name, .theme-error .forecast-line, .theme-error .kicker {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      letter-spacing: 0;
+    }
+    .theme-radar { background: #06262e; color: #e7fff8; }
+    .theme-meteo { background: linear-gradient(180deg, #d7f3ff, #fff 42%); }
+    .theme-meteo .name { color: #0c4a6e; }
+    .theme-dinner { background: linear-gradient(180deg, #2c2150, #5b3a68); color: #fff8ef; }
+    .theme-days { background: linear-gradient(180deg, #fff, #e7fbff); }
+    .theme-days .name { color: #0f5f73; }
+    .theme-continent { background: linear-gradient(180deg, #e7fbff, #fff 46%, #ffe8f4); }
+    .theme-rainbow { background: linear-gradient(180deg, #fff, #fff7fb); }
+    .theme-rainbow .name { color: #7a3ff0; }
+    .theme-flash { background: linear-gradient(180deg, #fffdf2, #fff1b8); }
+    .theme-flash .name { color: #9d123c; }
+
+    .theme-hurricane .kicker,
+    .theme-letterboard .kicker,
+    .theme-slot .kicker,
+    .theme-news .kicker,
+    .theme-movie .kicker,
+    .theme-error .kicker,
+    .theme-radar .kicker,
+    .theme-dinner .kicker { color: var(--sun); }
+
+    .theme-hurricane .meter-track,
+    .theme-letterboard .meter-track,
+    .theme-slot .meter-track,
+    .theme-news .meter-track,
+    .theme-movie .meter-track,
+    .theme-error .meter-track,
+    .theme-radar .meter-track,
+    .theme-dinner .meter-track { background: rgba(255, 255, 255, 0.22); }
+
+    .disclaimer {
+      margin: 16px auto 0;
+      text-align: center;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 1rem;
+    }
+
+    .noscript-note { margin-top: 16px; }
+
+    #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 6; overflow: hidden; }
+
+    .confetti {
+      position: fixed;
+      top: 22%;
+      left: 50%;
+      z-index: 7;
+      pointer-events: none;
+      animation-name: confetti-fall;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to { transform: translateX(40vw); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 1; }
+    }
+    @keyframes zap {
+      0%, 100% { opacity: 0; }
+      10% { opacity: 0.28; }
+      20% { opacity: 0; }
+    }
+    @keyframes confetti-fall {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(0.7); }
+      100% { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(1); }
+    }
+    @keyframes name-pop {
+      from { opacity: 0; transform: scale(0.86); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .theme-premiere .name { animation: name-pop 0.7s cubic-bezier(0.2, 0.85, 0.2, 1); }
+
+    @media (min-width: 800px) {
+      .stage { padding-top: 36px; }
+      .panel { padding: 36px 36px 28px; }
+    }
+
+    @media (max-width: 380px) {
+      .panel { padding: 22px 16px 18px; border-radius: 26px; }
+      .btn { font-size: 1.05rem; }
+      .choice-grid { grid-template-columns: 1fr; }
+      .seal { width: 90px; height: 90px; }
+    }
+
+    @media (hover: hover) {
+      .btn:hover { transform: translateY(-1px); }
+      .chip:hover, .choice:hover { transform: translateY(-1px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="sun-wrap">
+      <div class="rays"></div>
+      <div class="sun"></div>
+    </div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+    <svg class="rainbow" viewBox="0 0 400 180">
+      <path d="M20 180 A180 180 0 0 1 380 180" fill="none" stroke="#ff8fab" stroke-width="14" stroke-linecap="round"/>
+      <path d="M38 180 A162 162 0 0 1 362 180" fill="none" stroke="#ffd93d" stroke-width="14" stroke-linecap="round"/>
+      <path d="M56 180 A144 144 0 0 1 344 180" fill="none" stroke="#2ec4b6" stroke-width="14" stroke-linecap="round"/>
+      <path d="M74 180 A126 126 0 0 1 326 180" fill="none" stroke="#8d62e6" stroke-width="14" stroke-linecap="round"/>
+    </svg>
+    <svg class="bolt b1" viewBox="0 0 40 64">
+      <polygon points="24,0 8,30 18,30 10,64 36,26 24,26" fill="#ffd93d" stroke="#f0b429" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+    <svg class="bolt b2" viewBox="0 0 40 64">
+      <polygon points="24,0 8,30 18,30 10,64 36,26 24,26" fill="#fff4c2" stroke="#f0b429" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <main class="stage">
+    <section id="screen-open" class="screen panel">
+      <p class="eyebrow">The perfect date</p>
+      <div class="tia-frame" id="tiaFrame" hidden>
+        <div class="sun-wrap" aria-hidden="true">
+          <div class="rays"></div>
+          <div class="sun"></div>
+        </div>
+        <img id="tiaPhoto" alt="" draggable="false">
+      </div>
+      <div class="hero-art" id="heroArt" aria-hidden="true">
+        <div class="sun-wrap">
+          <div class="rays"></div>
+          <div class="sun"></div>
+        </div>
+        <div class="hero-cloud"></div>
+      </div>
+      <h1 id="forecastTitle" tabindex="-1">THE PERFECT DATE</h1>
+      <p class="tagline">Find out who your perfect date is.</p>
+      <ul class="preview-steps">
+        <li>Your Type</li>
+        <li>Your Vibe</li>
+        <li>Your Weekend</li>
+      </ul>
+      <button type="button" id="startBtn" class="btn btn-coral">Find My Perfect Date</button>
+      <p class="fine">Three quick steps. About a minute.</p>
+    </section>
+
+    <section id="screen-quiz" class="screen panel" hidden>
+      <p id="stepCount" class="step-count">Step 1 of 3</p>
+      <ol class="progress" id="progress">
+        <li class="progress-item is-current" aria-current="step" aria-label="Step 1, Your Type"><span aria-hidden="true">1</span>Your Type</li>
+        <li class="progress-item" aria-label="Step 2, Your Vibe"><span aria-hidden="true">2</span>Your Vibe</li>
+        <li class="progress-item" aria-label="Step 3, Your Weekend"><span aria-hidden="true">3</span>Your Weekend</li>
+      </ol>
+      <div id="quizRoot"></div>
+      <div class="quiz-nav">
+        <button type="button" id="nextBtn" class="btn btn-coral">Next</button>
+        <button type="button" id="backBtn" class="btn btn-ghost">Back</button>
+      </div>
+    </section>
+
+    <section id="screen-search" class="screen panel" hidden>
+      <div class="flash" aria-hidden="true"></div>
+      <p class="radar-label">Weekend radar</p>
+      <div class="radar" aria-hidden="true">
+        <div class="radar-sweep"></div>
+        <span class="blip" style="top: 32%; left: 62%"></span>
+        <span class="blip" style="top: 58%; left: 34%"></span>
+        <span class="blip" style="top: 44%; left: 48%"></span>
+      </div>
+      <h2 id="searchMessage" class="search-message" tabindex="-1" aria-live="polite"></h2>
+      <div class="search-progress" aria-hidden="true"><span id="searchProgress"></span></div>
+    </section>
+
+    <section id="screen-result" class="screen" hidden>
+      <div id="resultPanel" class="panel">
+        <div id="resultBody" aria-live="polite"></div>
+        <div class="actions">
+          <button type="button" id="againBtn" class="btn btn-coral">Check Again</button>
+          <button type="button" id="editBtn" class="btn btn-aqua">Change My Type</button>
+          <button type="button" id="elseBtn" class="btn btn-lavender">Absolutely Anyone Else</button>
+        </div>
+      </div>
+    </section>
+
+    <p id="disclaimer" class="disclaimer" hidden>For entertainment. The forecast may be slightly biased.</p>
+    <noscript>
+      <p class="disclaimer noscript-note">Turn on JavaScript to check your weekend forecast.</p>
+    </noscript>
+  </main>
+  <div id="confetti" aria-hidden="true"></div>
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       EASY EDITS
+       Front page: edit TIA_PHOTOS. Those pictures take turns on the
+       opening screen. Add another file in the photos folder, then add
+       a line here. Leave TIA_PHOTOS empty to show the sun instead.
+       Match photos: edit the PHOTOS list. Each reveal uses the next
+       picture, and the set repeats only after every photo has been shown.
+       Leave PHOTOS empty to hide the photo area.
+       Sounds are generated in the browser. Edit REVEAL_CUES to change
+       which sting plays for each result, or MASTER_VOLUME for loudness.
+       Colors live in the :root block near the top of the CSS.
+       Forecast headlines live in RESULTS.
+       Personalized lines live on each quiz option as joke.
+       Loading lines live in the message arrays just below.
+       Custom links live at /f/their-name. The site root explains the app.
+       Answers stay in this page only. Nothing is saved or sent.
+       ========================================================= */
+    const MASTER_VOLUME = 1;
+    const TIA_ROTATE_MS = 3400;
+    const TIA_PHOTOS = [
+      { src: "photos/tia-beach.jpg", focus: "center 32%" },
+      { src: "photos/tia-wink.jpg", focus: "center 26%" },
+      { src: "photos/tia-night.jpg", focus: "center 80%" },
+      { src: "photos/tia-green.jpg", focus: "40% 34%" },
+      { src: "photos/tia-sunny.jpg", focus: "center 42%" },
+      { src: "photos/tia-street.jpg", focus: "58% 18%" }
+    ];
+    let recipientList = [];
+    const PHOTOS = [
+      { src: "photos/john-dj.jpg", focus: "16% 40%" },
+      { src: "photos/john-sunset.jpg", focus: "34% 16%" },
+      { src: "photos/john-headshot.jpg", focus: "center 15%" },
+      { src: "photos/john-smile.jpg", focus: "center 28%" },
+      { src: "photos/john-hero.jpg", focus: "center 18%" },
+      { src: "photos/john-rose.jpg", focus: "62% 18%" },
+      { src: "photos/john-blue.jpg", focus: "center 24%" }
+    ];
+    const REVEAL_CUES = {
+      premiere: "airhorn",
+      alert: "warning",
+      stack: "double",
+      heat: "sizzle",
+      hurricane: "thunder",
+      royal: "royal",
+      letterboard: "board",
+      slot: "jackpot",
+      tropical: "island",
+      news: "bulletin",
+      movie: "cinema",
+      fakeout: "airhorn",
+      award: "award",
+      science: "lab",
+      error: "glitch",
+      radar: "sonar",
+      meteo: "jingle",
+      dinner: "romance",
+      days: "weekend",
+      continent: "boom",
+      rainbow: "sparkle",
+      flash: "thunder"
+    };
+
+    const FIRST_SEARCH_MESSAGES = [
+      "Reading your romantic atmosphere",
+      "Checking for chemistry",
+      "Your weekend forecast is ready"
+    ];
+
+    const LATER_SEARCH_MESSAGES = [
+      "Expanding the dating radius",
+      "Checking neighboring zip codes",
+      "Searching another time zone",
+      "Consulting a second meteorologist",
+      "Even the satellite is confused"
+    ];
+
+    const ANYONE_ELSE_MESSAGES = [
+      "Expanding the dating radius",
+      "Checking neighboring zip codes",
+      "Searching another time zone",
+      "Consulting a second meteorologist",
+      "Even the satellite is confused"
+    ];
+
+    const RESPECT_LINE = "We respect your request.";
+    const ATMOSPHERE_LINE = "Unfortunately, the atmosphere does not.";
+    const NO_PREFERENCE_JOKE = "You left it up to fate. Fate apparently knows John.";
+    const AGE_JOKE = "You set an age range. John has been in range this whole time.";
+
+    const TRAVEL_STOPS = [
+      { label: "Across town", joke: "You would travel across town. John is already in the forecast." },
+      { label: "About 30 minutes", joke: "About thirty minutes? John would drive longer." },
+      { label: "Up to an hour", joke: "Up to an hour in the car. John will bring snacks and the same smile." },
+      { label: "However far the vibe is", joke: "You would go as far as the vibe requires. The forecast did not need the extra miles." }
+    ];
+
+    const ICONS = {
+      dinner: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="17" cy="27" r="8" fill="none" stroke="#ef3d66" stroke-width="3"/><path d="M31 14v18M35 16v6a4 4 0 0 1-8 0v-6" fill="none" stroke="#ef3d66" stroke-width="3" stroke-linecap="round"/></svg>',
+      beach: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="16" cy="16" r="6" fill="#ffd93d"/><path d="M6 34c6-6 10-6 16 0s10 6 20 0" fill="none" stroke="#0f8f86" stroke-width="3" stroke-linecap="round"/></svg>',
+      music: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M20 34V14l14-3v16" fill="none" stroke="#7c5cbf" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="34" r="4" fill="#7c5cbf"/><circle cx="30" cy="27" r="4" fill="#7c5cbf"/></svg>',
+      movie: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="16" width="32" height="20" rx="3" fill="none" stroke="#ef3d66" stroke-width="3"/><path d="M8 22h32M16 16l-4-6M32 16l4-6" stroke="#ef3d66" stroke-width="3" stroke-linecap="round"/></svg>',
+      road: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 40c8-16 6-24 14-24s6 8 14 24" fill="none" stroke="#0f8f86" stroke-width="3" stroke-linecap="round"/><path d="M24 16v5M24 26v5M24 36v4" stroke="#0f8f86" stroke-width="3" stroke-linecap="round"/></svg>',
+      dancing: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="16" cy="12" r="4" fill="#ff8fab"/><circle cx="32" cy="12" r="4" fill="#7c5cbf"/><path d="M16 16l-4 18M16 22l8 2 8-4M32 16l4 18" fill="none" stroke="#2b2140" stroke-width="3" stroke-linecap="round"/></svg>',
+      spontaneous: '<svg viewBox="0 0 48 48" aria-hidden="true"><polygon points="26,4 16,24 22,24 18,44 36,20 28,20" fill="#ffd93d" stroke="#f0b429" stroke-width="2" stroke-linejoin="round"/></svg>',
+      home: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 22 L24 8 L40 22 V40 H30 V28 H18 V40 H8 Z" fill="none" stroke="#ef3d66" stroke-width="3" stroke-linejoin="round"/></svg>'
+    };
+
+    /* First item is always the opening reveal. The rest are shuffled. */
+    const RESULTS = [
+      {
+        id: "premiere",
+        theme: "premiere",
+        layout: "premiere",
+        kicker: "Your weekend forecast",
+        name: "JOHN PLACE",
+        lines: ["100% chance of John.", "Your weekend just got a little more interesting."]
+      },
+      {
+        id: "classified",
+        theme: "alert",
+        layout: "alert",
+        kicker: "Classified advisory",
+        name: "{LAST_UP}, {FULL_UP}",
+        lines: ["A classified warm front is moving in."]
+      },
+      {
+        id: "stacked",
+        theme: "stacked",
+        layout: "stack",
+        name: "JOHN PLACE",
+        lines: ["Tall forecast. Same guy."]
+      },
+      {
+        id: "sunshine",
+        theme: "heat",
+        layout: "heat",
+        name: "{FIRST_UP} 'SUNSHINE' {LAST_UP}",
+        lines: ["Your personal heat advisory."]
+      },
+      {
+        id: "hurricane",
+        theme: "hurricane",
+        layout: "hurricane",
+        kicker: "Warning",
+        name: "Hurricane John Place",
+        lines: ["Making landfall in your weekend plans."]
+      },
+      {
+        id: "royal",
+        theme: "royal",
+        layout: "royal",
+        name: "Sir {FIRST} of {LAST}",
+        lines: ["A royal front has entered the forecast."]
+      },
+      {
+        id: "spaced",
+        theme: "letterboard",
+        layout: "letterboard",
+        name: "JOHN PLACE",
+        lines: ["You asked for space. We added some."]
+      },
+      {
+        id: "again",
+        theme: "slot",
+        layout: "slot",
+        name: "JOHN PLACE AGAIN",
+        reels: ["JOHN", "PLACE", "AGAIN"],
+        lines: ["Different search. Same atmosphere."]
+      },
+      {
+        id: "tropical",
+        theme: "tropical",
+        layout: "tropical",
+        kicker: "Postcard",
+        name: "John Place, Tropical Edition",
+        lines: ["Apparently your type is a recurring weather pattern."]
+      },
+      {
+        id: "breaking",
+        theme: "news",
+        layout: "news",
+        name: "BREAKING WEATHER: JOHN PLACE",
+        lines: ["Officials recommend giving the man a chance."]
+      },
+      {
+        id: "sequel",
+        theme: "movie",
+        layout: "movie",
+        name: "John Place: The Sequel",
+        lines: ["The forecast has been renewed for another weekend."]
+      },
+      {
+        id: "fakeout",
+        theme: "fakeout",
+        layout: "fakeout",
+        fakeName: "Definitely Not John Place",
+        name: "JOHN PLACE",
+        lines: ["Okay. It's John Place."]
+      },
+      {
+        id: "deluxe",
+        theme: "award",
+        layout: "award",
+        name: "JOHN PLACE, DELUXE EDITION",
+        lines: ["You raised your standards. We upgraded the font."]
+      },
+      {
+        id: "effect",
+        theme: "science",
+        layout: "science",
+        kicker: "Field report",
+        name: "The John Place Effect",
+        lines: ["Scientists cannot explain this level of consistency."]
+      },
+      {
+        id: "missing",
+        theme: "error",
+        layout: "error",
+        kicker: "System notice",
+        name: "Error 404: Other Men Not Found",
+        lines: ["Backup forecast: John Place."]
+      },
+      {
+        id: "radar",
+        theme: "radar",
+        layout: "radar",
+        name: "JOHN PLACE",
+        lines: ["The radar keeps picking up husband material."]
+      },
+      {
+        id: "meteo",
+        theme: "meteo",
+        layout: "meteo",
+        name: "Meteorologist John Place",
+        lines: ["He predicts dinner. With him."]
+      },
+      {
+        id: "dinner",
+        theme: "dinner",
+        layout: "dinner",
+        kicker: "Evening outlook",
+        name: "John Place, With a Chance of Dinner",
+        lines: ["Reservations are looking increasingly likely."]
+      },
+      {
+        id: "extended",
+        theme: "days",
+        layout: "days",
+        name: "JOHN PLACE, EXTENDED FORECAST",
+        days: [
+          { dow: "Friday", who: "John", cond: "Clear" },
+          { dow: "Saturday", who: "John", cond: "Clear" },
+          { dow: "Sunday", who: "John", cond: "Still John" }
+        ],
+        lines: ["Friday: John. Saturday: John. Sunday: still John."]
+      },
+      {
+        id: "continent",
+        theme: "continent",
+        layout: "continent",
+        name: "JOHN PLACE",
+        lines: ["We checked another continent. You're not going to believe this."]
+      },
+      {
+        id: "rainbow",
+        theme: "rainbow",
+        layout: "rainbow",
+        name: "JOHN PLACE, CLEAR SKIES",
+        lines: ["The rainbow ends at the same forecast."]
+      },
+      {
+        id: "flash",
+        theme: "flash",
+        layout: "flash",
+        name: "FLASH FORECAST: JOHN PLACE",
+        lines: ["A bright strike. The same man."]
+      }
+    ];
+
+    const STEPS = [
+      {
+        title: "Your Type",
+        lede: "Tell the sky what you like. Skip anything.",
+        blocks: [
+          { kind: "age" },
+          {
+            kind: "choices",
+            group: "height",
+            title: "Preferred height",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "under", label: `Under 5'7"`, joke: "You leaned a little shorter. The forecast still came back full-size John." },
+              { id: "mid", label: `5'7" to 5'10"`, joke: "That height window was noted. John fits the weekend anyway." },
+              { id: "tall", label: `5'11" to 6'2"`, joke: "You wanted some height. John is standing by for the weekend." },
+              { id: "xtall", label: `6'3" and up`, joke: "You aimed high. The radar aimed at John." },
+              { id: "any", label: "No preference", joke: "No height preference. Every altitude has John." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "hair",
+            title: "Hair color",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "black", label: "Black", joke: "Dark hair made the list. The forecast did not get more specific than John." },
+              { id: "brown", label: "Brown", joke: "Brown hair preferred. John is taking that as a personal invitation." },
+              { id: "blonde", label: "Blonde", joke: "Blonde was on the table. The radar returned John anyway." },
+              { id: "red", label: "Red", joke: "Red hair got a mention. The atmosphere filed it under suggestions." },
+              { id: "silver", label: "Silver", joke: "Silver hair, distinguished. John would like a chance before the long-range outlook." },
+              { id: "bald", label: "Shaved or bald", joke: "Shaved or bald is welcome. So, apparently, is John." },
+              { id: "any", label: "No preference", joke: "Hair was left open. The forecast filled in the rest with John." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "face",
+            title: "Facial hair",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "clean", label: "Clean shaven", joke: "Clean shaven. John can work with a razor or a reservation." },
+              { id: "stubble", label: "Light stubble", joke: "Light stubble selected. The weekend scruff forecast is still John." },
+              { id: "beard", label: "Beard", joke: "A beard was requested. John will show up either way, and so will dinner." },
+              { id: "mustache", label: "Mustache", joke: "Mustache energy. The forecast grew a sense of humor and stayed John." },
+              { id: "any", label: "No preference", joke: "Facial hair was optional. John was not." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "clothes",
+            title: "Clothing style",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "casual", label: "Casual", joke: "Casual style. John owns a nice shirt and knows when to use it." },
+              { id: "sharp", label: "Dressed up", joke: "Dressed up. John will iron something. This is serious." },
+              { id: "street", label: "Streetwear", joke: "Streetwear noted. John can dress for the plan you actually make." },
+              { id: "outdoors", label: "Outdoorsy", joke: "Outdoorsy. John will bring shoes he can walk in and a backup dinner plan." },
+              { id: "any", label: "No preference", joke: "Clothes were no big deal. The forecast picked a person, not an outfit." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "smile",
+            title: "Smile",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "big", label: "Big grin", joke: "You wanted a big smile. John has been practicing in reflective surfaces." },
+              { id: "soft", label: "Soft smile", joke: "A soft smile. John is ready to earn one back." },
+              { id: "rare", label: "Rare but worth it", joke: "Rare but worth it. John would like to be the reason." },
+              { id: "any", label: "No preference", joke: "Smile preference skipped. John is still smiling about this." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "build",
+            title: "Build",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "cards",
+            options: [
+              { id: "athletic", label: "Athletic", joke: "Athletic. John will walk you to dinner. That counts as training." },
+              { id: "average", label: "Average", joke: "Average build. John is exactly, persistently, in the running." },
+              { id: "dadbod", label: "Dad bod", joke: "Dad bod welcome. John brought appetite and a dessert plan." },
+              { id: "any", label: "No preference", joke: "No preference on build. The forecast was never about measurements." }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Your Vibe",
+        lede: "Pick any traits that matter. Or none.",
+        blocks: [
+          {
+            kind: "choices",
+            group: "vibe",
+            title: "Personality",
+            hint: "Choose any.",
+            mode: "multi",
+            style: "chips",
+            options: [
+              { id: "funny", label: "Funny", joke: "You requested funny. John has been preparing for this moment his entire life." },
+              { id: "confident", label: "Confident", joke: "You wanted confident. John has never doubted this forecast." },
+              { id: "romantic", label: "Romantic", joke: "You picked romantic. John already knows a place with good lighting." },
+              { id: "creative", label: "Creative", joke: "You wanted creative. John considers this whole situation a work of art." },
+              { id: "ambitious", label: "Ambitious", joke: "You asked for ambitious. John is campaigning for your weekend." },
+              { id: "thoughtful", label: "Thoughtful", joke: "You wanted thoughtful. John would text when he is on the way. He is already on the way." },
+              { id: "adventurous", label: "Adventurous", joke: "You wanted adventure. The forecast suggests taking a chance on John." },
+              { id: "laidback", label: "Laid back", joke: "You wanted laid back. John has cleared his weekend, casually." },
+              { id: "listener", label: "Good listener", joke: "You selected a good listener. John would like to hear what time dinner is." },
+              { id: "handy", label: "Handy", joke: "You wanted handy. John can assemble a reservation in under five minutes." },
+              { id: "animals", label: "Loves animals", joke: "You wanted someone who loves animals. John is prepared to win over the dog." },
+              { id: "plans", label: "Can actually make plans", joke: "You needed someone who can actually make plans. John has a plan. It is dinner." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "texting",
+            title: "Preferred texting style",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "quick", label: "Quick replies", joke: "You like quick replies. John saw this forecast immediately." },
+              { id: "morning", label: "Good morning texts", joke: "Good morning texts. John is already drafting Saturday." },
+              { id: "memes", label: "Memes", joke: "Memes all day. John is both the joke and the reason to laugh." },
+              { id: "voice", label: "Voice notes", joke: "Voice notes welcome. John has a spoken forecast ready." },
+              { id: "whenever", label: "Whenever", joke: "Texting whenever. John is free whenever the weekend is." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "love",
+            title: "Love language",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "words", label: "Words of affirmation", joke: "Words of affirmation. The radar has several, and they are sincere." },
+              { id: "time", label: "Quality time", joke: "Quality time selected. John has a free weekend and a full charge." },
+              { id: "gifts", label: "Receiving gifts", joke: "Gifts are your language. John is bringing the plan, which counts." },
+              { id: "service", label: "Acts of service", joke: "Acts of service noted. John will handle the driving and the dessert order." },
+              { id: "touch", label: "Physical touch", joke: "Physical touch selected. The forecast recommends a hug and then dinner." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "goals",
+            title: "Relationship goals",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "casual", label: "Something casual", joke: "Something casual. The atmosphere went ahead and got invested." },
+              { id: "dating", label: "Dating", joke: "You want to date. John is available this weekend. And the next one." },
+              { id: "relationship", label: "A relationship", joke: "A real relationship. The long-range forecast is also John." },
+              { id: "vibe", label: "See where it goes", joke: "See where it goes. It goes to John." },
+              { id: "marriage", label: "Marriage-minded", joke: "Marriage-minded. The radar has been hinting for a while." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "deals",
+            title: "Dealbreakers",
+            hint: "Choose any, or skip.",
+            mode: "multi",
+            style: "chips",
+            options: [
+              { id: "texter", label: "Bad texter", joke: "A bad texter is a dealbreaker. John would like to discuss that over dinner." },
+              { id: "rude", label: "Rude to servers", joke: "Rude to servers is a no. John already knows how to be kind in public." },
+              { id: "ambition", label: "No ambition", joke: "No ambition is out. John is applying himself to this date." },
+              { id: "dogs", label: "Hates dogs", joke: "Hates dogs is a dealbreaker. John is ready to be approved by the dog." },
+              { id: "plans", label: "Can't make plans", joke: "Can't make plans is out. John made one. It involves you." },
+              { id: "none", label: "None, really", joke: "No real dealbreakers. The forecast still had a favorite." }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Your Weekend",
+        lede: "How should the weekend feel?",
+        blocks: [
+          {
+            kind: "choices",
+            group: "weekend",
+            title: "Weekend plans",
+            hint: "Choose any.",
+            mode: "multi",
+            style: "cards",
+            options: [
+              { id: "dinner", label: "Dinner and drinks", joke: "Dinner and drinks? Reservations are looking increasingly likely." },
+              { id: "beach", label: "Beach day", joke: "Beach day selected. John will bring sunscreen and conversation." },
+              { id: "music", label: "Live music", joke: "Live music. John will nod like he knew the band." },
+              { id: "movie", label: "Movie night", joke: "Movie night. John is free, and he will share the good snacks." },
+              { id: "road", label: "Road trip", joke: "Road trip energy. John will drive. You pick the playlist." },
+              { id: "dancing", label: "Dancing", joke: "Dancing selected. John has committed to at least one good song." },
+              { id: "spontaneous", label: "Something spontaneous", joke: "Something spontaneous. Saying yes to John counts." },
+              { id: "home", label: "Stay home and order food", joke: "Stay home and order food. John knows several restaurants personally." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "rhythm",
+            title: "Early bird or night owl",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "early", label: "Early bird", joke: "Early bird. John can do brunch and still be charming." },
+              { id: "night", label: "Night owl", joke: "Night owl. The late forecast is still John." },
+              { id: "both", label: "A little of both", joke: "A little of both. John can meet you whenever the sky looks good." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "social",
+            title: "Homebody or outgoing",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "homebody", label: "Homebody", joke: "Homebody noted. John is excellent at staying in." },
+              { id: "outgoing", label: "Outgoing", joke: "Outgoing. John will go wherever you point the weekend." },
+              { id: "depends", label: "Depends on the weekend", joke: "Depends on the weekend. This weekend, it depends on John." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "cooking",
+            title: "Cooking ability",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "chef", label: "Loves to cook", joke: "You wanted a man who can cook. John knows several restaurants personally." },
+              { id: "recipe", label: "Can follow a recipe", joke: "Can follow a recipe. John can follow you to a good table." },
+              { id: "takeout", label: "Orders takeout with confidence", joke: "Takeout with confidence. John has references from several menus." },
+              { id: "any", label: "No preference", joke: "Cooking was left open. John suggests a place with candles anyway." }
+            ]
+          },
+          {
+            kind: "choices",
+            group: "music",
+            title: "Music taste",
+            hint: "Choose one, or skip.",
+            mode: "single",
+            style: "chips",
+            options: [
+              { id: "pop", label: "Pop", joke: "Pop music. John is the chorus that keeps coming back." },
+              { id: "rnb", label: "R&B", joke: "R&B selected. The forecast is smooth and very persistent." },
+              { id: "country", label: "Country", joke: "Country. This is a love song with one name in it." },
+              { id: "rock", label: "Rock", joke: "Rock. John is the encore you did not request and got anyway." },
+              { id: "hiphop", label: "Hip hop", joke: "Hip hop. The hook is John Place." },
+              { id: "anything", label: "Anything with a beat", joke: "Anything with a beat. John will dance to the forecast." }
+            ]
+          },
+          { kind: "travel" },
+          {
+            kind: "wish",
+            title: "Describe your perfect man or woman",
+            hint: "Optional. It shapes the date in the picture."
+          }
+        ]
+      }
+    ];
+
+    let stepIndex = 0;
+    let busy = false;
+    let searchesStarted = 0;
+    let laterCursor = 0;
+    let jokeCursor = 0;
+    let ageTouched = false;
+    let travelTouched = false;
+    let firstPending = true;
+    let lastResultId = "";
+    let deck = [];
+    let deckIndex = 0;
+
+    const startBtn = document.getElementById("startBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const againBtn = document.getElementById("againBtn");
+    const editBtn = document.getElementById("editBtn");
+    const elseBtn = document.getElementById("elseBtn");
+    const searchScreen = document.getElementById("screen-search");
+    const searchMessage = document.getElementById("searchMessage");
+    const searchProgress = document.getElementById("searchProgress");
+    const resultPanel = document.getElementById("resultPanel");
+    const resultBody = document.getElementById("resultBody");
+    const disclaimer = document.getElementById("disclaimer");
+
+    function prefersReducedMotion() {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function wait(ms) {
+      return new Promise((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function shuffle(items) {
+      const copy = items.slice();
+      for (let index = copy.length - 1; index > 0; index -= 1) {
+        const swap = Math.floor(Math.random() * (index + 1));
+        const held = copy[index];
+        copy[index] = copy[swap];
+        copy[swap] = held;
+      }
+      return copy;
+    }
+
+    function refillDeck() {
+      deck = shuffle(RESULTS.slice(1));
+      if (deck.length > 1 && deck[0].id === lastResultId) {
+        const swap = 1 + Math.floor(Math.random() * (deck.length - 1));
+        const held = deck[0];
+        deck[0] = deck[swap];
+        deck[swap] = held;
+      }
+      deckIndex = 0;
+    }
+
+    function takeResult() {
+      if (firstPending) {
+        firstPending = false;
+        lastResultId = RESULTS[0].id;
+        return RESULTS[0];
+      }
+      if (deckIndex >= deck.length) refillDeck();
+      const result = deck[deckIndex];
+      deckIndex += 1;
+      lastResultId = result.id;
+      return result;
+    }
+
+    function laterTrio() {
+      const trio = [0, 1, 2].map((offset) => {
+        return LATER_SEARCH_MESSAGES[(laterCursor + offset) % LATER_SEARCH_MESSAGES.length];
+      });
+      laterCursor = (laterCursor + 3) % LATER_SEARCH_MESSAGES.length;
+      return trio;
+    }
+
+    function pickJoke() {
+      const jokes = Array.from(document.querySelectorAll("[data-joke][aria-pressed='true']")).map((button) => button.dataset.joke);
+      if (ageTouched) jokes.push(AGE_JOKE);
+      if (travelTouched) {
+        const travel = document.getElementById("travelRange");
+        jokes.push(TRAVEL_STOPS[Number(travel.value)].joke);
+      }
+      const pool = jokes.length ? jokes : [NO_PREFERENCE_JOKE];
+      const joke = pool[jokeCursor % pool.length];
+      jokeCursor += 1;
+      return joke;
+    }
+
+    function photoHTML() {
+      return '<div class="photo-slot" hidden></div>';
+    }
+
+    function kickerHTML(text) {
+      if (!text) return "";
+      return `<p class="kicker">${escapeHTML(text)}</p>`;
+    }
+
+    let currentPerson = {
+      full: "John Place",
+      first: "John",
+      last: "Place",
+      fullUp: "JOHN PLACE",
+      firstUp: "JOHN",
+      lastUp: "PLACE"
+    };
+    let nextRevealPhoto = null;
+    let forecastSlug = "tia";
+
+    function say(text) {
+      const person = currentPerson;
+      return String(text)
+        .replaceAll("{FULL_UP}", person.fullUp)
+        .replaceAll("{FULL}", person.full)
+        .replaceAll("{FIRST_UP}", person.firstUp)
+        .replaceAll("{LAST_UP}", person.lastUp)
+        .replaceAll("{FIRST}", person.first)
+        .replaceAll("{LAST}", person.last)
+        .replaceAll("JOHN PLACE", person.fullUp)
+        .replaceAll("John Place", person.full)
+        .replaceAll("John", person.first);
+    }
+
+    function setPerson(full) {
+      const clean = String(full || "John Place").trim().replace(/\s+/g, " ");
+      const bits = clean.split(" ");
+      const first = bits.length > 1 ? bits.slice(0, -1).join(" ") : bits[0];
+      const last = bits.length > 1 ? bits[bits.length - 1] : first;
+      currentPerson = {
+        full: clean,
+        first,
+        last,
+        fullUp: clean.toUpperCase(),
+        firstUp: first.toUpperCase(),
+        lastUp: last.toUpperCase()
+      };
+    }
+
+    function possessive(name) {
+      return /s$/i.test(name) ? `${name}'` : `${name}'s`;
+    }
+
+    function applyBranding(name) {
+      const clean = String(name || "").trim();
+      const heading = clean ? `${possessive(clean).toUpperCase()} PERFECT DATE` : "THE PERFECT DATE";
+      const title = document.getElementById("forecastTitle");
+      if (title) title.textContent = heading;
+      document.title = clean ? `${possessive(clean)} Perfect Date` : "The Perfect Date";
+      const photo = document.getElementById("tiaPhoto");
+      if (photo && clean) photo.alt = clean;
+    }
+
+    function nameHTML(text) {
+      const spoken = say(text);
+      const long = spoken.length > 18 ? " long" : "";
+      return `<h2 class="name${long}" tabindex="-1">${escapeHTML(spoken)}</h2>`;
+    }
+
+    function linesHTML(lines) {
+      return (lines || []).map((line, index) => {
+        return `<p class="forecast-line${index ? " forecast-soft" : ""}">${escapeHTML(say(line))}</p>`;
+      }).join("");
+    }
+
+    function meterHTML() {
+      return `
+        <div class="meter" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Compatibility 100 percent">
+          <div class="meter-top"><span>Compatibility</span><strong>100%</strong></div>
+          <div class="meter-track"><div class="meter-fill"></div></div>
+        </div>`;
+    }
+
+    function noteHTML(joke) {
+      return `
+        <aside class="note">
+          <p class="note-label">From your answers</p>
+          <p class="note-copy">${escapeHTML(say(joke))}</p>
+        </aside>`;
+    }
+
+    function resultMarkup(middle, lines, joke) {
+      return photoHTML() + middle + linesHTML(lines) + meterHTML() + noteHTML(joke);
+    }
+
+    function reelHTML(finalWord) {
+      const decoys = ["MIST", "SUN", "RAIN", "HEAT", "WIND", "HAZE", "GUST", "COAST"];
+      const words = prefersReducedMotion() ? [finalWord] : decoys.concat(decoys, [finalWord]);
+      const items = words.map((word) => `<span class="reel-item">${escapeHTML(word)}</span>`).join("");
+      return `<span class="reel"><span class="reel-strip">${items}</span></span>`;
+    }
+
+    const LAYOUTS = {
+      premiere(result) {
+        return '<div class="hero-sun" aria-hidden="true"></div>' + kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      standard(result) {
+        return kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      alert(result) {
+        return '<div class="hazard-bar" aria-hidden="true"></div>' + kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      stack() {
+        return `<h2 class="name stack" tabindex="-1"><span>${escapeHTML(currentPerson.firstUp)}</span><span>${escapeHTML(currentPerson.lastUp)}</span></h2>`;
+      },
+      heat(result) {
+        return '<p class="heat-flag">Heat advisory</p>' + nameHTML(result.name);
+      },
+      hurricane(result) {
+        return '<div class="swirl" aria-hidden="true"></div>' + kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      royal(result) {
+        return '<div class="crown" aria-hidden="true"><svg viewBox="0 0 64 40"><path d="M4 30 L12 12 L22 22 L32 6 L42 22 L52 12 L60 30 Z" fill="#f0b429" stroke="#a86b00" stroke-width="2" stroke-linejoin="round"/><rect x="6" y="30" width="52" height="6" rx="2" fill="#ef3d66"/></svg></div>' + nameHTML(result.name);
+      },
+      letterboard() {
+        const shown = prefersReducedMotion() ? " show" : "";
+        const rows = [currentPerson.firstUp, currentPerson.lastUp].map((word) => {
+          const tiles = Array.from(word).map((letter) => `<span class="tile${shown}">${escapeHTML(letter)}</span>`).join("");
+          return `<span class="board-row">${tiles}</span>`;
+        }).join("");
+        return `<h2 class="letter-heading" tabindex="-1" aria-label="${escapeHTML(currentPerson.fullUp)}"><span class="board" aria-hidden="true">${rows}</span></h2>`;
+      },
+      slot(result) {
+        const words = [currentPerson.firstUp.slice(0, 10), currentPerson.lastUp.slice(0, 10), "AGAIN"];
+        const reels = words.map(reelHTML).join("");
+        return `<h2 class="slot-heading" tabindex="-1" aria-label="${escapeHTML(say(result.name))}"><span class="slots" aria-hidden="true">${reels}</span></h2>`;
+      },
+      tropical(result) {
+        return '<div class="stamp-row"><div class="stamp">Approved</div></div>' + kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      news(result) {
+        return '<div class="breaking-bar"><span class="live-dot"></span><span>Breaking weather</span></div>' + nameHTML(result.name);
+      },
+      movie(result) {
+        return '<p class="now-showing">Now showing</p>' + nameHTML(result.name);
+      },
+      award(result) {
+        return '<div class="seal" aria-hidden="true"><span>Deluxe</span></div>' + nameHTML(result.name);
+      },
+      science(result) {
+        return kickerHTML(result.kicker) + nameHTML(result.name) + '<dl class="stats"><div><dt>Consistency</dt><dd>100%</dd></div><div><dt>Other names</dt><dd>0</dd></div><div><dt>Status</dt><dd>Unexplained</dd></div></dl>';
+      },
+      error(result) {
+        return kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      radar(result) {
+        return '<div class="mini-radar" aria-hidden="true"><div class="radar-sweep"></div></div>' + nameHTML(result.name);
+      },
+      meteo(result) {
+        return '<p class="on-air">On the air</p>' + nameHTML(result.name);
+      },
+      dinner(result) {
+        return '<div class="moon" aria-hidden="true"></div>' + kickerHTML(result.kicker) + nameHTML(result.name);
+      },
+      days(result) {
+        const cards = result.days.map((day) => {
+          return `<article class="day"><p class="dow">${escapeHTML(day.dow)}</p><p class="who">${escapeHTML(say(day.who))}</p><p class="cond">${escapeHTML(say(day.cond))}</p></article>`;
+        }).join("");
+        return nameHTML(result.name) + `<div class="days">${cards}</div>`;
+      },
+      continent(result) {
+        return '<div class="map" aria-hidden="true"><i></i></div>' + nameHTML(result.name);
+      },
+      rainbow(result) {
+        return '<svg class="mini-rainbow" viewBox="0 0 220 90" aria-hidden="true"><path d="M16 86 A94 94 0 0 1 204 86" fill="none" stroke="#ff8fab" stroke-width="8" stroke-linecap="round"/><path d="M28 86 A82 82 0 0 1 192 86" fill="none" stroke="#ffd93d" stroke-width="8" stroke-linecap="round"/><path d="M40 86 A70 70 0 0 1 180 86" fill="none" stroke="#2ec4b6" stroke-width="8" stroke-linecap="round"/><path d="M52 86 A58 58 0 0 1 168 86" fill="none" stroke="#8d62e6" stroke-width="8" stroke-linecap="round"/></svg>' + nameHTML(result.name);
+      },
+      flash(result) {
+        return '<svg class="flash-bolt" viewBox="0 0 40 64" aria-hidden="true"><polygon points="24,0 8,30 18,30 10,64 36,26 24,26" fill="#ffd93d" stroke="#d08900" stroke-width="2" stroke-linejoin="round"/></svg>' + nameHTML(result.name);
+      }
+    };
+
+    function renderResult(result, joke) {
+      const layout = LAYOUTS[result.layout] || LAYOUTS.standard;
+      return resultMarkup(layout(result), result.lines, joke);
+    }
+
+    let audioCtx = null;
+    let masterGain = null;
+    let photoDeck = [];
+    let photoCursor = 0;
+    let lastPhotoSrc = "";
+    let tiaDeck = [];
+    let tiaCursor = 0;
+    let lastTiaSrc = "";
+    let tiaTimer = 0;
+    let tiaSwapToken = 0;
+    let tiaRequest = 0;
+    let tiaFailures = 0;
+
+    function nextFromDeck(list, deck, cursor, lastSrc) {
+      if (!list.length) return { photo: null, deck, cursor, lastSrc };
+      if (cursor >= deck.length) {
+        deck = shuffle(list);
+        if (deck.length > 1 && deck[0].src === lastSrc) {
+          const swap = 1 + Math.floor(Math.random() * (deck.length - 1));
+          const held = deck[0];
+          deck[0] = deck[swap];
+          deck[swap] = held;
+        }
+        cursor = 0;
+      }
+      const photo = deck[cursor];
+      return { photo, deck, cursor: cursor + 1, lastSrc: photo.src };
+    }
+
+    function nextPhoto() {
+      if (forecastSlug !== "tia") return null;
+      const next = nextFromDeck(PHOTOS, photoDeck, photoCursor, lastPhotoSrc);
+      photoDeck = next.deck;
+      photoCursor = next.cursor;
+      lastPhotoSrc = next.lastSrc;
+      return next.photo;
+    }
+
+    function nextTiaPhoto() {
+      const next = nextFromDeck(recipientList, tiaDeck, tiaCursor, lastTiaSrc);
+      tiaDeck = next.deck;
+      tiaCursor = next.cursor;
+      lastTiaSrc = next.lastSrc;
+      return next.photo;
+    }
+
+    function showTiaFrame() {
+      const frame = document.getElementById("tiaFrame");
+      const hero = document.getElementById("heroArt");
+      if (frame) frame.hidden = false;
+      if (hero) hero.hidden = true;
+    }
+
+    function showTiaFallback() {
+      const frame = document.getElementById("tiaFrame");
+      const hero = document.getElementById("heroArt");
+      stopTiaRotation();
+      if (frame) frame.hidden = true;
+      if (hero) hero.hidden = false;
+    }
+
+    function watchTia(image, photo) {
+      const request = ++tiaRequest;
+      image.onload = () => {
+        if (request !== tiaRequest || image.naturalWidth <= 0) return;
+        tiaFailures = 0;
+        showTiaFrame();
+      };
+      image.onerror = () => {
+        if (request !== tiaRequest) return;
+        tiaFailures += 1;
+        if (tiaFailures >= recipientList.length) {
+          showTiaFallback();
+          return;
+        }
+        const next = nextTiaPhoto();
+        if (next) paintTia(next, false);
+      };
+      image.style.objectPosition = photo.focus || "center 30%";
+      if (image.getAttribute("src") !== photo.src) image.src = photo.src;
+      else if (image.complete && image.naturalWidth > 0) showTiaFrame();
+    }
+
+    function paintTia(photo, animate) {
+      const image = document.getElementById("tiaPhoto");
+      if (!image || !photo) return;
+      const token = ++tiaSwapToken;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const apply = () => {
+        if (token !== tiaSwapToken) return;
+        image.classList.remove("is-out");
+        watchTia(image, photo);
+      };
+      if (!animate || reduced) {
+        apply();
+        return;
+      }
+      image.classList.add("is-out");
+      window.setTimeout(apply, 320);
+    }
+
+    function stopTiaRotation() {
+      if (tiaTimer) window.clearInterval(tiaTimer);
+      tiaTimer = 0;
+    }
+
+    function startTiaRotation() {
+      stopTiaRotation();
+      if (recipientList.length < 2) return;
+      tiaTimer = window.setInterval(() => {
+        const open = document.getElementById("screen-open");
+        if (!open || open.hidden) return;
+        const photo = nextTiaPhoto();
+        if (photo) paintTia(photo, true);
+      }, TIA_ROTATE_MS);
+    }
+
+    function bindTiaPhoto() {
+      const image = document.getElementById("tiaPhoto");
+      const frame = document.getElementById("tiaFrame");
+      const hero = document.getElementById("heroArt");
+      if (!image || !frame) return;
+      if (!recipientList.length) {
+        frame.hidden = true;
+        if (hero) hero.hidden = false;
+        return;
+      }
+      lastTiaSrc = image.getAttribute("src") || "";
+      const opening = recipientList.find((photo) => photo.src === lastTiaSrc) || recipientList[0];
+      watchTia(image, opening);
+      startTiaRotation();
+    }
+
+    function mountPhoto(root) {
+      const slot = root.querySelector(".photo-slot");
+      if (!slot) return;
+      slot.hidden = true;
+      slot.replaceChildren();
+      const photo = nextRevealPhoto || nextPhoto();
+      nextRevealPhoto = null;
+      if (!photo || !photo.src) return;
+      const image = document.createElement("img");
+      image.alt = photo.alt || currentPerson.full;
+      image.draggable = false;
+      image.style.objectPosition = photo.focus || "center";
+      image.addEventListener("load", () => {
+        if (photo.generated && image.naturalWidth > image.naturalHeight) {
+          image.style.aspectRatio = "4 / 3";
+        }
+        slot.hidden = image.naturalWidth <= 0;
+      });
+      image.addEventListener("error", () => {
+        slot.hidden = true;
+        slot.replaceChildren();
+      });
+      slot.appendChild(image);
+      image.src = photo.src;
+    }
+
+    function unlockAudio() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        if (!audioCtx) {
+          audioCtx = new AudioCtx();
+          const compressor = audioCtx.createDynamicsCompressor();
+          compressor.threshold.value = -8;
+          compressor.knee.value = 6;
+          compressor.ratio.value = 5;
+          compressor.attack.value = 0.002;
+          compressor.release.value = 0.16;
+          masterGain = audioCtx.createGain();
+          masterGain.gain.value = MASTER_VOLUME;
+          masterGain.connect(compressor);
+          compressor.connect(audioCtx.destination);
+        }
+        if (audioCtx.state === "suspended") audioCtx.resume();
+      } catch (error) {
+        audioCtx = null;
+      }
+    }
+
+    function envGain(peak, dur, delay) {
+      const start = audioCtx.currentTime + (delay || 0);
+      const amp = audioCtx.createGain();
+      amp.gain.setValueAtTime(0.0001, start);
+      amp.gain.exponentialRampToValueAtTime(Math.max(peak, 0.001), start + Math.min(0.025, dur * 0.25));
+      amp.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      amp.connect(masterGain);
+      return { amp, start };
+    }
+
+    function beep(freq, dur, type, peak, delay, endFreq) {
+      if (!audioCtx) return;
+      const { amp, start } = envGain(peak, dur, delay);
+      const osc = audioCtx.createOscillator();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, start);
+      if (endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(35, endFreq), start + dur);
+      osc.connect(amp);
+      osc.start(start);
+      osc.stop(start + dur + 0.03);
+    }
+
+    function burst(dur, peak, delay, freq, kind) {
+      if (!audioCtx) return;
+      const { amp, start } = envGain(peak, dur, delay);
+      const length = Math.max(1, Math.floor(audioCtx.sampleRate * dur));
+      const buffer = audioCtx.createBuffer(1, length, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let index = 0; index < length; index += 1) data[index] = Math.random() * 2 - 1;
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = kind || "lowpass";
+      filter.frequency.setValueAtTime(freq, start);
+      source.connect(filter);
+      filter.connect(amp);
+      source.start(start);
+      source.stop(start + dur + 0.02);
+    }
+
+    function playCue(name) {
+      if (!audioCtx) return;
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const cues = {
+        ping() {
+          beep(740, 0.09, "sine", 0.35, 0);
+          beep(1480, 0.07, "sine", 0.18, 0.01);
+        },
+        stormping() {
+          beep(180, 0.16, "sawtooth", 0.4, 0, 90);
+          burst(0.12, 0.28, 0, 900, "bandpass");
+        },
+        scratch() {
+          burst(0.28, 0.55, 0, 3200, "highpass");
+          beep(420, 0.22, "sawtooth", 0.35, 0, 90);
+        },
+        wah() {
+          beep(392, 0.18, "sawtooth", 0.45, 0);
+          beep(349, 0.18, "sawtooth", 0.45, 0.16);
+          beep(294, 0.28, "sawtooth", 0.5, 0.32);
+          beep(220, 0.4, "triangle", 0.45, 0.5);
+        },
+        wrong() {
+          beep(150, 0.45, "square", 0.4, 0);
+          beep(110, 0.55, "square", 0.4, 0.08);
+          burst(0.2, 0.25, 0, 400, "lowpass");
+        },
+        airhorn() {
+          beep(466, 0.72, "sawtooth", 0.62, 0);
+          beep(470, 0.72, "square", 0.42, 0);
+          beep(700, 0.6, "sawtooth", 0.36, 0.02);
+          burst(0.2, 0.4, 0, 2200, "highpass");
+          beep(523, 0.18, "triangle", 0.48, 0.7);
+          beep(659, 0.18, "triangle", 0.48, 0.82);
+          beep(784, 0.22, "triangle", 0.5, 0.94);
+          beep(1047, 0.42, "triangle", 0.48, 1.06);
+        },
+        fanfare() {
+          beep(523, 0.16, "sawtooth", 0.4, 0);
+          beep(659, 0.16, "sawtooth", 0.4, 0.12);
+          beep(784, 0.16, "sawtooth", 0.42, 0.24);
+          beep(1047, 0.4, "triangle", 0.45, 0.36);
+          beep(784, 0.4, "triangle", 0.28, 0.36);
+          burst(0.25, 0.22, 0.36, 5000, "highpass");
+        },
+        thunder() {
+          beep(78, 0.9, "sine", 0.85, 0, 36);
+          beep(52, 1.15, "sine", 0.6, 0.04, 28);
+          burst(0.85, 0.75, 0, 280, "lowpass");
+          burst(0.12, 0.45, 0, 4200, "highpass");
+          burst(0.4, 0.35, 0.35, 180, "lowpass");
+        },
+        warning() {
+          beep(880, 0.12, "square", 0.4, 0);
+          beep(880, 0.12, "square", 0.4, 0.18);
+          beep(880, 0.12, "square", 0.4, 0.36);
+          beep(220, 0.45, "sawtooth", 0.5, 0.52);
+          burst(0.3, 0.3, 0.52, 600, "lowpass");
+        },
+        double() {
+          beep(120, 0.22, "sine", 0.7, 0);
+          burst(0.16, 0.4, 0, 300, "lowpass");
+          beep(90, 0.32, "sine", 0.75, 0.24);
+          burst(0.22, 0.45, 0.24, 240, "lowpass");
+        },
+        sizzle() {
+          burst(0.45, 0.4, 0, 6000, "highpass");
+          beep(740, 0.35, "sawtooth", 0.4, 0.2);
+          beep(988, 0.4, "square", 0.28, 0.28);
+        },
+        royal() {
+          beep(392, 0.2, "sawtooth", 0.4, 0);
+          beep(587, 0.2, "sawtooth", 0.4, 0.16);
+          beep(784, 0.45, "triangle", 0.48, 0.32);
+          beep(1175, 0.45, "triangle", 0.28, 0.32);
+          burst(0.3, 0.2, 0.32, 4500, "highpass");
+        },
+        board() {
+          for (let index = 0; index < 6; index += 1) burst(0.04, 0.28, index * 0.06, 1800, "bandpass");
+          beep(880, 0.18, "square", 0.35, 0.42);
+          beep(1319, 0.28, "triangle", 0.4, 0.55);
+        },
+        ratchet() {
+          for (let index = 0; index < 10; index += 1) burst(0.035, 0.32, index * 0.09, 2500, "highpass");
+        },
+        jackpot() {
+          beep(1319, 0.08, "square", 0.35, 0);
+          beep(1568, 0.08, "square", 0.35, 0.09);
+          beep(2093, 0.16, "square", 0.38, 0.18);
+          beep(523, 0.4, "sawtooth", 0.4, 0.3);
+          beep(659, 0.4, "sawtooth", 0.35, 0.3);
+          beep(784, 0.45, "sawtooth", 0.35, 0.3);
+          burst(0.25, 0.3, 0.3, 5000, "highpass");
+        },
+        island() {
+          [523, 587, 659, 784, 880].forEach((freq, index) => beep(freq, 0.18, "triangle", 0.42, index * 0.1));
+          burst(0.2, 0.18, 0.45, 3000, "highpass");
+        },
+        bulletin() {
+          beep(196, 0.25, "sawtooth", 0.45, 0);
+          beep(247, 0.2, "square", 0.35, 0.12);
+          beep(294, 0.35, "sawtooth", 0.45, 0.24);
+          beep(392, 0.4, "triangle", 0.4, 0.36);
+          burst(0.18, 0.3, 0, 1200, "bandpass");
+        },
+        cinema() {
+          beep(55, 0.8, "sine", 0.8, 0, 110);
+          burst(0.55, 0.5, 0, 500, "lowpass");
+          beep(220, 0.4, "sawtooth", 0.25, 0.25, 880);
+          burst(0.35, 0.25, 0.2, 2500, "highpass");
+        },
+        award() {
+          [1047, 1319, 1568, 2093].forEach((freq, index) => beep(freq, 0.14, "triangle", 0.32, index * 0.07));
+          beep(523, 0.45, "sawtooth", 0.4, 0.32);
+          beep(659, 0.45, "sawtooth", 0.35, 0.32);
+          beep(784, 0.5, "triangle", 0.4, 0.32);
+        },
+        lab() {
+          beep(660, 0.06, "square", 0.28, 0);
+          beep(880, 0.06, "square", 0.28, 0.08);
+          beep(440, 0.06, "square", 0.28, 0.16);
+          beep(990, 0.08, "square", 0.3, 0.24);
+          beep(1320, 0.25, "triangle", 0.4, 0.36);
+        },
+        glitch() {
+          beep(140, 0.18, "square", 0.4, 0);
+          beep(90, 0.22, "sawtooth", 0.4, 0.1);
+          burst(0.16, 0.35, 0.05, 2500, "highpass");
+          beep(880, 0.2, "sine", 0.4, 0.4);
+        },
+        sonar() {
+          beep(520, 0.22, "sine", 0.45, 0);
+          beep(520, 0.28, "sine", 0.22, 0.18);
+          beep(780, 0.16, "triangle", 0.35, 0.42);
+          burst(0.12, 0.2, 0.42, 2000, "highpass");
+        },
+        jingle() {
+          beep(659, 0.12, "triangle", 0.4, 0);
+          beep(784, 0.12, "triangle", 0.4, 0.12);
+          beep(988, 0.28, "triangle", 0.45, 0.24);
+          beep(784, 0.2, "sine", 0.25, 0.4);
+        },
+        romance() {
+          beep(523, 0.25, "triangle", 0.4, 0);
+          beep(659, 0.25, "triangle", 0.35, 0.08);
+          beep(784, 0.4, "sine", 0.4, 0.2);
+          beep(1047, 0.45, "triangle", 0.28, 0.28);
+        },
+        weekend() {
+          beep(523, 0.16, "triangle", 0.45, 0);
+          beep(659, 0.16, "triangle", 0.45, 0.18);
+          beep(784, 0.36, "triangle", 0.5, 0.36);
+          burst(0.2, 0.2, 0.36, 4000, "highpass");
+        },
+        boom() {
+          beep(60, 0.55, "sine", 0.85, 0, 40);
+          burst(0.35, 0.6, 0, 350, "lowpass");
+          beep(196, 0.3, "sawtooth", 0.35, 0.08);
+        },
+        sparkle() {
+          [784, 988, 1175, 1319, 1568, 1976].forEach((freq, index) => {
+            beep(freq, 0.12, "triangle", 0.32, index * 0.06);
+          });
+          burst(0.2, 0.18, 0.2, 6000, "highpass");
+        }
+      };
+      (cues[name] || cues.fanfare)();
+    }
+
+    function playReveal(result) {
+      playCue(REVEAL_CUES[result.layout] || "fanfare");
+    }
+
+    function animateMeter(root) {
+      const fill = root.querySelector(".meter-fill");
+      if (!fill) return;
+      if (prefersReducedMotion()) {
+        fill.style.width = "100%";
+        return;
+      }
+      fill.style.width = "0%";
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          fill.style.width = "100%";
+        });
+      });
+    }
+
+    function burstConfetti() {
+      if (prefersReducedMotion()) return;
+      const layer = document.getElementById("confetti");
+      const colors = ["#ff6b6b", "#ffd93d", "#2ec4b6", "#c4b5fd", "#ff8fab", "#fff"];
+      for (let index = 0; index < 42; index += 1) {
+        const bit = document.createElement("span");
+        bit.className = "confetti";
+        bit.style.background = colors[index % colors.length];
+        bit.style.borderRadius = index % 2 === 0 ? "50%" : "4px";
+        bit.style.width = `${7 + (index % 5) * 2}px`;
+        bit.style.height = `${9 + (index % 4) * 3}px`;
+        bit.style.setProperty("--dx", `${(Math.random() - 0.5) * 320}px`);
+        bit.style.setProperty("--dy", `${120 + Math.random() * 420}px`);
+        bit.style.setProperty("--rot", `${180 + Math.random() * 360}deg`);
+        bit.style.animationDuration = `${0.9 + Math.random() * 0.6}s`;
+        bit.style.animationDelay = `${Math.random() * 0.12}s`;
+        layer.appendChild(bit);
+        bit.addEventListener("animationend", () => bit.remove());
+      }
+    }
+
+    async function spinSlots(root) {
+      const strips = Array.from(root.querySelectorAll(".reel-strip"));
+      if (!strips.length || prefersReducedMotion()) return;
+      playCue("ratchet");
+      strips.forEach((strip, index) => {
+        const itemHeight = strip.children[0] ? strip.children[0].getBoundingClientRect().height : 64;
+        const distance = (strip.children.length - 1) * (itemHeight || 64);
+        strip.style.transition = "none";
+        strip.style.transform = "translateY(0)";
+        strip.getBoundingClientRect();
+        strip.style.transition = `transform ${1.15 + index * 0.28}s cubic-bezier(.12,.7,.12,1)`;
+        strip.style.transform = `translateY(-${distance}px)`;
+      });
+      await wait(1150 + 2 * 280 + 180);
+    }
+
+    async function flipBoard(root) {
+      const tiles = Array.from(root.querySelectorAll(".tile"));
+      if (prefersReducedMotion()) {
+        tiles.forEach((tile) => tile.classList.add("show"));
+        return;
+      }
+      for (let index = 0; index < tiles.length; index += 1) {
+        tiles[index].classList.add("show");
+        await wait(70);
+      }
+    }
+
+    function focusHeading(root) {
+      const heading = root.querySelector("h2");
+      if (heading) heading.focus();
+    }
+
+    function scrollTop() {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    }
+
+    async function present(result, joke) {
+      Array.from(resultPanel.classList).forEach((className) => {
+        if (className.startsWith("theme-")) resultPanel.classList.remove(className);
+      });
+      resultPanel.classList.remove("is-revealed");
+      resultPanel.classList.add(`theme-${result.theme}`);
+      showScreen("screen-result");
+      scrollTop();
+
+      if (result.layout === "fakeout") {
+        resultBody.innerHTML = `<h2 class="name long fake-name" tabindex="-1">${escapeHTML(say(result.fakeName))}</h2>`;
+        focusHeading(resultBody);
+        playCue("wrong");
+        await wait(1500);
+        resultPanel.classList.add("is-revealed");
+        resultBody.innerHTML = resultMarkup(nameHTML(result.name), result.lines, joke);
+      } else {
+        resultBody.innerHTML = renderResult(result, joke);
+      }
+
+      if (result.layout === "slot") await spinSlots(resultBody);
+      if (result.layout === "letterboard") await flipBoard(resultBody);
+      mountPhoto(resultBody);
+      animateMeter(resultBody);
+      burstConfetti();
+      playReveal(result);
+      focusHeading(resultBody);
+      disclaimer.hidden = false;
+    }
+
+    function setSearchMessage(text) {
+      searchMessage.textContent = text;
+      const punch = text === RESPECT_LINE || text === ATMOSPHERE_LINE;
+      searchMessage.classList.toggle("is-punch", punch);
+    }
+
+    async function playSequence(messages, stepMs, pauseMs) {
+      const pauseAt = messages.length - 2;
+      const storm = searchScreen.classList.contains("storm");
+      for (let index = 0; index < messages.length; index += 1) {
+        const text = messages[index];
+        setSearchMessage(text);
+        searchProgress.style.width = `${((index + 1) / messages.length) * 100}%`;
+        if (text === RESPECT_LINE) playCue("scratch");
+        else if (text === ATMOSPHERE_LINE) playCue("wah");
+        else playCue(storm ? "stormping" : "ping");
+        const usePause = pauseMs && index >= pauseAt;
+        await wait(usePause ? pauseMs : stepMs);
+      }
+    }
+
+    function collectAnswers() {
+      const selected = Array.from(document.querySelectorAll("[aria-pressed='true']")).map((button) => button.textContent.trim());
+      const age = document.getElementById("ageReadout");
+      const travel = document.getElementById("travelReadout");
+      return {
+        selected,
+        age: ageTouched && age ? age.textContent : "",
+        travel: travelTouched && travel ? travel.textContent : "",
+        wish: (document.getElementById("perfectNote")?.value || "").trim().slice(0, 400)
+      };
+    }
+
+    function startReveal() {
+      revealTask = fetch("/api/reveal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ slug: forecastSlug, answers: collectAnswers() })
+      }).then((response) => response.ok ? response.json() : null).catch(() => null);
+    }
+
+    async function waitForReveal() {
+      const extra = ["Painting your weekend", "Matching a face to the forecast", "Clearing the last clouds"];
+      let step = 0;
+      const deadline = Date.now() + 22000;
+      while (Date.now() < deadline) {
+        const winner = await Promise.race([
+          revealTask.then((value) => ({ value })),
+          wait(1500).then(() => ({ value: undefined }))
+        ]);
+        if (winner.value !== undefined) return winner.value;
+        setSearchMessage(extra[step % extra.length]);
+        searchProgress.style.width = "100%";
+        playCue("ping");
+        step += 1;
+      }
+      return null;
+    }
+
+    let revealTask = null;
+
+    async function runForecast(mode) {
+      if (busy) return;
+      unlockAudio();
+      busy = true;
+      syncBusy();
+      startReveal();
+      try {
+        showScreen("screen-search");
+        searchScreen.classList.toggle("storm", mode === "else");
+        searchProgress.style.width = "0%";
+        searchMessage.focus();
+        let messages;
+        let stepMs = 1000;
+        let pauseMs = 0;
+        if (mode === "else") {
+          messages = ANYONE_ELSE_MESSAGES.concat([RESPECT_LINE, ATMOSPHERE_LINE]);
+          stepMs = 850;
+          pauseMs = 1300;
+        } else if (searchesStarted === 0) {
+          messages = FIRST_SEARCH_MESSAGES;
+        } else {
+          messages = laterTrio();
+        }
+        await playSequence(messages, stepMs, pauseMs);
+        const reveal = await waitForReveal();
+        if (reveal && reveal.senderName) setPerson(reveal.senderName);
+        else if (forecastSlug !== "tia") setPerson("Your date");
+        if (reveal && reveal.photo && reveal.photo.src) nextRevealPhoto = reveal.photo;
+        searchScreen.classList.remove("storm");
+        const joke = pickJoke();
+        const result = takeResult();
+        await present(result, joke);
+        searchesStarted += 1;
+      } finally {
+        busy = false;
+        syncBusy();
+      }
+    }
+
+    function syncBusy() {
+      document.body.classList.toggle("is-busy", busy);
+      [startBtn, nextBtn, backBtn, againBtn, editBtn, elseBtn].forEach((button) => {
+        button.disabled = busy;
+      });
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach((screen) => {
+        screen.hidden = screen.id !== id;
+      });
+      if (id === "screen-open") {
+        const heading = document.querySelector("#screen-open h1");
+        if (heading) heading.focus();
+        const photo = nextTiaPhoto();
+        if (photo) paintTia(photo, false);
+        startTiaRotation();
+      } else {
+        stopTiaRotation();
+      }
+    }
+
+    function showStep(index) {
+      stepIndex = index;
+      document.querySelectorAll(".step").forEach((panel, panelIndex) => {
+        panel.hidden = panelIndex !== index;
+      });
+      document.getElementById("stepCount").textContent = `Step ${index + 1} of 3`;
+      nextBtn.textContent = index === STEPS.length - 1 ? "Reveal My Perfect Date" : "Next";
+      document.querySelectorAll(".progress-item").forEach((item, itemIndex) => {
+        item.classList.toggle("is-current", itemIndex === index);
+        item.classList.toggle("is-done", itemIndex < index);
+        if (itemIndex === index) item.setAttribute("aria-current", "step");
+        else item.removeAttribute("aria-current");
+      });
+      const heading = document.querySelectorAll(".step")[index].querySelector("h2");
+      if (heading) heading.focus();
+      scrollTop();
+    }
+
+    function toggleChoice(button, mode, group) {
+      const wasOn = button.getAttribute("aria-pressed") === "true";
+      if (mode === "single") {
+        group.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", "false"));
+      }
+      button.setAttribute("aria-pressed", wasOn ? "false" : "true");
+    }
+
+    function renderChoices(block) {
+      const wrap = document.createElement("section");
+      wrap.className = "block";
+      const title = document.createElement("h3");
+      title.id = `label-${block.group}`;
+      title.textContent = block.title;
+      wrap.append(title);
+      if (block.hint) {
+        const hint = document.createElement("p");
+        hint.className = "hint";
+        hint.textContent = block.hint;
+        wrap.append(hint);
+      }
+      const group = document.createElement("div");
+      group.className = block.style === "cards" ? "choice-grid" : "chips";
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-labelledby", title.id);
+      block.options.forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = block.style === "cards" ? "choice" : "chip";
+        button.dataset.joke = option.joke;
+        button.setAttribute("aria-pressed", "false");
+        if (block.style === "cards" && ICONS[option.id]) {
+          const icon = document.createElement("span");
+          icon.className = "choice-icon";
+          icon.innerHTML = ICONS[option.id];
+          button.append(icon);
+        }
+        const label = document.createElement("span");
+        label.className = "choice-label";
+        label.textContent = option.label;
+        button.append(label);
+        button.addEventListener("click", () => toggleChoice(button, block.mode, group));
+        group.append(button);
+      });
+      wrap.append(group);
+      return wrap;
+    }
+
+    function renderAge() {
+      const wrap = document.createElement("section");
+      wrap.className = "block";
+      wrap.innerHTML = `
+        <h3 id="label-age">Age range</h3>
+        <p class="hint">Adults only, 18 and up.</p>
+        <p id="ageReadout" class="readout">Ages 25 to 40</p>
+        <label class="slider-label" for="ageMin">Youngest</label>
+        <input id="ageMin" type="range" min="18" max="80" value="25" aria-describedby="label-age">
+        <label class="slider-label" for="ageMax">Oldest</label>
+        <input id="ageMax" type="range" min="18" max="80" value="40" aria-describedby="label-age">`;
+      return wrap;
+    }
+
+    function renderTravel() {
+      const wrap = document.createElement("section");
+      wrap.className = "block";
+      wrap.innerHTML = `
+        <h3 id="label-travel">How far would you travel for a date</h3>
+        <p class="hint">Slide it, or leave the suggestion.</p>
+        <p id="travelReadout" class="readout">About 30 minutes</p>
+        <input id="travelRange" type="range" min="0" max="3" step="1" value="1" aria-labelledby="label-travel">
+        <div class="ticks" aria-hidden="true"><span>Across town</span><span>30 min</span><span>1 hour</span><span>Wherever</span></div>`;
+      return wrap;
+    }
+
+    function paintRange(input) {
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const percent = ((Number(input.value) - min) / (max - min)) * 100;
+      input.style.background = `linear-gradient(90deg, #ff5d8f 0%, #ffd93d ${percent}%, #efe7fb ${percent}%, #efe7fb 100%)`;
+    }
+
+    function syncAge(changed, mark) {
+      const minInput = document.getElementById("ageMin");
+      const maxInput = document.getElementById("ageMax");
+      let min = Number(minInput.value);
+      let max = Number(maxInput.value);
+      if (min > max) {
+        if (changed === "min") {
+          max = min;
+          maxInput.value = String(max);
+        } else {
+          min = max;
+          minInput.value = String(min);
+        }
+      }
+      document.getElementById("ageReadout").textContent = `Ages ${min} to ${max}`;
+      paintRange(minInput);
+      paintRange(maxInput);
+      if (mark) ageTouched = true;
+    }
+
+    function syncTravel(mark) {
+      const input = document.getElementById("travelRange");
+      const stop = TRAVEL_STOPS[Number(input.value)];
+      document.getElementById("travelReadout").textContent = stop.label;
+      input.setAttribute("aria-valuetext", stop.label);
+      paintRange(input);
+      if (mark) travelTouched = true;
+    }
+
+    function renderWish(block) {
+      const wrap = document.createElement("section");
+      wrap.className = "block";
+      const title = document.createElement("h3");
+      title.id = "label-perfect";
+      title.textContent = block.title;
+      const hint = document.createElement("p");
+      hint.className = "hint";
+      hint.textContent = block.hint;
+      const input = document.createElement("textarea");
+      input.id = "perfectNote";
+      input.className = "wish";
+      input.maxLength = 400;
+      input.rows = 4;
+      input.setAttribute("aria-labelledby", title.id);
+      wrap.append(title, hint, input);
+      return wrap;
+    }
+
+    function buildQuiz() {
+      const root = document.getElementById("quizRoot");
+      STEPS.forEach((stepData, index) => {
+        const panel = document.createElement("div");
+        panel.className = "step";
+        panel.hidden = index !== 0;
+        const title = document.createElement("h2");
+        title.className = "step-title";
+        title.tabIndex = -1;
+        title.textContent = stepData.title;
+        const lede = document.createElement("p");
+        lede.className = "lede";
+        lede.textContent = stepData.lede;
+        panel.append(title, lede);
+        stepData.blocks.forEach((block) => {
+          if (block.kind === "age") panel.append(renderAge());
+          else if (block.kind === "travel") panel.append(renderTravel());
+          else if (block.kind === "wish") panel.append(renderWish(block));
+          else panel.append(renderChoices(block));
+        });
+        root.append(panel);
+      });
+    }
+
+    buildQuiz();
+    refillDeck();
+
+    function useRecipientPhotos(list) {
+      if (!Array.isArray(list) || !list.length) return;
+      recipientList = list.map((photo) => ({
+        src: photo.src,
+        focus: photo.focus || "center 30%"
+      }));
+      tiaDeck = [];
+      tiaCursor = 0;
+      lastTiaSrc = recipientList[0].src;
+      tiaFailures = 0;
+      paintTia(recipientList[0], false);
+      startTiaRotation();
+    }
+
+    function readSlug() {
+      const parts = location.pathname.split("/").filter(Boolean);
+      if (parts[0] === "f" && parts[1]) return decodeURIComponent(parts[1]).toLowerCase();
+      return "";
+    }
+
+    forecastSlug = readSlug();
+    if (!forecastSlug) location.replace("/");
+    if (forecastSlug === "tia") {
+      recipientList = TIA_PHOTOS;
+      TIA_PHOTOS.forEach((photo) => {
+        const image = new Image();
+        image.src = photo.src;
+      });
+      PHOTOS.forEach((photo) => {
+        const image = new Image();
+        image.src = photo.src;
+      });
+    }
+    bindTiaPhoto();
+    if (forecastSlug && forecastSlug !== "tia") applyBranding(forecastSlug.replace(/-/g, " "));
+
+    if (forecastSlug) fetch(`/api/forecast?slug=${encodeURIComponent(forecastSlug)}`)
+      .then((response) => response.ok ? response.json() : null)
+      .then((forecast) => {
+        if (!forecast) return;
+        applyBranding(forecast.recipientName);
+        useRecipientPhotos(forecast.recipientPhotos);
+      })
+      .catch(() => {});
+    syncAge("min", false);
+    syncTravel(false);
+    document.getElementById("ageMin").addEventListener("input", () => syncAge("min", true));
+    document.getElementById("ageMax").addEventListener("input", () => syncAge("max", true));
+    document.getElementById("travelRange").addEventListener("input", () => syncTravel(true));
+
+    startBtn.addEventListener("click", () => {
+      if (busy) return;
+      showScreen("screen-quiz");
+      showStep(stepIndex);
+    });
+
+    backBtn.addEventListener("click", () => {
+      if (busy) return;
+      if (stepIndex === 0) showScreen("screen-open");
+      else showStep(stepIndex - 1);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (busy) return;
+      if (stepIndex < STEPS.length - 1) showStep(stepIndex + 1);
+      else runForecast("quiz");
+    });
+
+    againBtn.addEventListener("click", () => runForecast("again"));
+    elseBtn.addEventListener("click", () => runForecast("else"));
+    editBtn.addEventListener("click", () => {
+      if (busy) return;
+      showScreen("screen-quiz");
+      showStep(0);
+    });
+  </script>
+</body>
+</html>

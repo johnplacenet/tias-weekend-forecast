@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/f/:slug", "destination": "/index.html" },
+    { "source": "/f/:slug", "destination": "/forecast.html" },
     { "source": "/login", "destination": "/login.html" },
     { "source": "/signup", "destination": "/login.html" },
     { "source": "/studio", "destination": "/studio.html" }

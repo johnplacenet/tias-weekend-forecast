@@ -11,15 +11,8 @@ import {
 
 export const config = { maxDuration: 60 };
 
-function pickPhotos(photos, count) {
-  const pool = (photos || []).filter((photo) => photo && photo.src);
-  for (let index = pool.length - 1; index > 0; index -= 1) {
-    const swap = Math.floor(Math.random() * (index + 1));
-    const held = pool[index];
-    pool[index] = pool[swap];
-    pool[swap] = held;
-  }
-  return pool.slice(0, count);
+function identityPhotos(photos, count) {
+  return (photos || []).filter((photo) => photo && photo.src).slice(0, count);
 }
 
 export default async function handler(req, res) {
@@ -34,8 +27,8 @@ export default async function handler(req, res) {
       json(res, 404, { error: "That forecast is not ready." });
       return;
     }
-    const senderPhotos = pickPhotos(forecast.senderPhotos, 2);
-    const recipientPhotos = pickPhotos(forecast.recipientPhotos, 2);
+    const senderPhotos = identityPhotos(forecast.senderPhotos, 2);
+    const recipientPhotos = identityPhotos(forecast.recipientPhotos, 2);
     const fallback = senderPhotos[0] || null;
     const usage = await usageFor(forecast.slug).catch(() => ({ day: "", count: DAILY_PORTRAITS, all: null }));
     let photo = fallback ? { src: fallback.src, focus: fallback.focus || "center 30%", generated: false } : null;

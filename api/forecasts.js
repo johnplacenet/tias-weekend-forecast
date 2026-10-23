@@ -16,7 +16,7 @@ function summary(forecast) {
     senderName: forecast.senderName,
     recipientCount: (forecast.recipientPhotos || []).length,
     senderCount: (forecast.senderPhotos || []).length,
-    link: forecast.slug === "tia" ? "/" : `/f/${forecast.slug}`
+    link: `/f/${forecast.slug}`
   };
 }
 
