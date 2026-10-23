@@ -39,11 +39,11 @@ export default async function handler(req, res) {
     }
     const buffer = Buffer.from(match[2], "base64");
     if (buffer.length > 2_500_000) {
-      json(res, 400, { error: "That photo is over 2.5 MB. Use a smaller one." });
+      json(res, 400, { error: "That photo is still too big after resizing. Try a different one." });
       return;
     }
     const key = role === "sender" ? "senderPhotos" : "recipientPhotos";
-    const photos = forecast[key] || [];
+    const photos = body.replace ? [] : (forecast[key] || []);
     if (photos.length >= MAX_PHOTOS) {
       json(res, 400, { error: `Use up to ${MAX_PHOTOS} photos.` });
       return;

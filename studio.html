@@ -142,21 +142,40 @@
 
     function fileToData(file) {
       return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+        const image = new Image();
+        const url = URL.createObjectURL(file);
+        image.onload = () => {
+          URL.revokeObjectURL(url);
+          const edge = Math.max(image.width, image.height) || 1;
+          const scale = Math.min(1, 1600 / edge);
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(image.width * scale));
+          canvas.height = Math.max(1, Math.round(image.height * scale));
+          canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+          let quality = 0.82;
+          let data = canvas.toDataURL("image/jpeg", quality);
+          while (data.length > 1_800_000 && quality > 0.45) {
+            quality -= 0.08;
+            data = canvas.toDataURL("image/jpeg", quality);
+          }
+          resolve(data);
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error("One photo could not be read. Use a JPG or PNG."));
+        };
+        image.src = url;
       });
     }
 
     async function uploadSet(slug, role, input) {
       const files = Array.from(input.files || []).slice(0, 8);
-      for (const file of files) {
-        const data = await fileToData(file);
+      for (let index = 0; index < files.length; index += 1) {
+        const data = await fileToData(files[index]);
         const response = await fetch("/api/upload", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ slug, role, data })
+          body: JSON.stringify({ slug, role, data, replace: index === 0 })
         });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(payload.error || "A photo could not be saved.");
@@ -215,7 +234,7 @@
       event.preventDefault();
       const status = document.getElementById("createStatus");
       status.className = "ok";
-      status.textContent = "Saving…";
+      status.textContent = "Preparing photos…";
       try {
         const response = await fetch("/api/forecasts", {
           method: "POST",
@@ -232,12 +251,12 @@
         const url = new URL(data.link, location.origin).href;
         status.textContent = url;
         event.target.reset();
-        const me = await session();
-        await refresh(me.role);
       } catch (error) {
         status.className = "error";
         status.textContent = error.message;
       }
+      const me = await session();
+      if (me.signedIn) await refresh(me.role);
     });
 
     document.getElementById("person").addEventListener("submit", async (event) => {
